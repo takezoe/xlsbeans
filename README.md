@@ -30,6 +30,8 @@ To use XLSBeans, add the following dependency to your pom.xml:
 
 For example, here is one Excel sheet.
 
+![Sample Excel](excel.png)
+
 Map this Excel sheet to POJO using ```@HorizontalRecords``` and ```@LabelledCell```.
 
 ```java
