@@ -92,22 +92,22 @@ public class LabelledCellProcessor implements FieldProcessor {
 			}
 		}
 		if(setter != null){
-			if(targetCell.getContents().length() > 0){
+//			if(targetCell.getContents().length() > 0){
 				Utils.setPosition(targetCell.getColumn(), targetCell.getRow(), obj,
 						Utils.toPropertyName(setter.getName()));
-			} else {
-				Utils.setPosition(column, row, obj,
-						Utils.toPropertyName(setter.getName()));
-			}
+//			} else {
+//				Utils.setPosition(column, row, obj,
+//						Utils.toPropertyName(setter.getName()));
+//			}
 			Utils.invokeSetter(setter, obj, targetCell.getContents());
 		}
 
 		if(field != null){
-			if(targetCell.getContents().length() > 0){
+//			if(targetCell.getContents().length() > 0){
 				Utils.setPosition(targetCell.getColumn(), targetCell.getRow(), obj, field.getName());
-			} else {
-				Utils.setPosition(column, row, obj, field.getName());
-			}
+//			} else {
+//				Utils.setPosition(column, row, obj, field.getName());
+//			}
 			Utils.setField(field, obj, targetCell.getContents());
 		}
 	}

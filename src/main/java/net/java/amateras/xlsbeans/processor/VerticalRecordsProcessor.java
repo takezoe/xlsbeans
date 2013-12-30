@@ -225,10 +225,10 @@ public class VerticalRecordsProcessor implements FieldProcessor {
 					}
 
 					if(property instanceof Method){
-						Utils.setPosition(hColumn, hRow, record, Utils.toPropertyName(((Method) property).getName()));
+						Utils.setPosition(valueCell.getColumn(), valueCell.getRow(), record, Utils.toPropertyName(((Method) property).getName()));
 						Utils.invokeSetter((Method) property, record, valueCell.getContents());
 					} else if(property instanceof Field){
-						Utils.setPosition(hColumn, hRow, record, ((Field) property).getName());
+						Utils.setPosition(valueCell.getColumn(), valueCell.getRow(), record, ((Field) property).getName());
 						Utils.setField((Field) property, record, valueCell.getContents());
 					}
 				}
