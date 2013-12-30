@@ -31,9 +31,9 @@
     </developer>
   </developers>
   <scm>
-    <connection>scm:svn:http://amateras.svn.sourceforge.net/svnroot/amateras/xlsbeans/trunk/xlsbeans</connection>
-    <developerConnection>scm:svn:https://amateras.svn.sourceforge.net/svnroot/amateras/xlsbeans/trunk/xlsbeans</developerConnection>
-    <url>http://amateras.svn.sourceforge.net/viewvc/amateras/xlsbeans/trunk/xlsbeans/</url>
+    <connection>scm:git:https://github.com/takezoe/xlsbeans.git</connection>
+    <developerConnection>scm:git:https://github.com/takezoe/xlsbeans.git</developerConnection>
+    <url>https://github.com/takezoe/xlsbeans</url>
   </scm>
 
   <mailingLists>
@@ -44,8 +44,8 @@
   </mailingLists>
 
   <issueManagement>
-    <system>SourceForge.jp Ticket System</system>
-    <url>http://sourceforge.jp/projects/amateras/ticket/</url>
+    <system>GitHub Issues</system>
+    <url>https://github.com/takezoe/xlsbeans/issues</url>
   </issueManagement>
 
   <repositories>
