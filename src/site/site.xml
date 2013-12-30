@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="XLSBeans">
+  <body>
+    <menu name="ドキュメント">
+      <item name="基本的な使い方" href="howtouse.html" />
+      <item name="ダウンロード" href="download.html" />
+      <item name="リリースノート" href="release.html" />
+    </menu>
+    <menu ref="reports" />
+  </body>
+</project>

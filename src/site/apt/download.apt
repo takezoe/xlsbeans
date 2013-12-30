@@ -1,0 +1,36 @@
+            ------
+            ダウンロード
+            ------
+            Naoki Takezoe
+            ------
+            2011-07-06
+
+ダウンロード
+
+ XLSBeansのリリース版は以下のURLからダウンロードすることができます。
+
+ * {{http://sourceforge.jp/projects/amateras/releases/?package_id=5761}}
+
+ []
+
+* {Mavenを使用する場合}
+
+ Mavenを使用する場合はpom.xmlに以下の記述を追加してください。
+
+--------
+<repositories>
+  <repository>
+    <id>amateras</id>
+    <name>Project Amateras Maven2 Repository</name>
+    <url>http://amateras.sourceforge.jp/mvn/</url>
+  </repository>
+</repositories>
+
+<dependencies>
+  <dependency>
+    <groupId>jp.sf.amateras.xlsbeans</groupId>
+    <artifactId>xlsbeans</artifactId>
+    <version>1.2.1</version>
+  </dependency>
+</dependencies>
+--------

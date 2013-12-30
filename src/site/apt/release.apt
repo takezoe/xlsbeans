@@ -1,0 +1,76 @@
+            ------
+            リリースノート
+            ------
+            Naoki Takezoe
+            ------
+            2011-07-06
+
+リリースノート
+
+* {1.2.1 - 2011/07/05}
+
+ * POI使用時に数式のセルの値の取得時にエラーが発生する問題を修正。
+
+ []
+
+* {1.2.0 - 2010/07/03}
+
+ * Excel2007に対応しました。
+
+ * JavaExcel APIでの文字化けに対応しました。
+
+ []
+
+* {1.1.0 - 2010/03/14}
+
+ * publicフィールドをサポートしました。
+
+ * DynamicAnnotationBuilderにクラスローダがセットされていない場合、コンテキストクラスローダを使用するようにしました。
+
+ []
+
+* {1.0.7 - 2008/12/23}
+
+ * DynamicAnnotationBuilderにOGNLで使用するためのクラスローダを指定できるようにしました。
+
+ * @LabelledCellにskip属性を追加しました。
+
+ * @IterateTablesにoptional属性を追加しました。
+
+ []
+
+* {1.0.6 - 2008/11/24}
+
+ * @HorizontalRecordsと@VerticalRecordsの処理を高速化しました。
+
+ * XMLによるアノテーションの指定時にJavassistではなくProxyを使うようにしました（Javassistは不要になりました）。
+
+ * @HorizontalRecordsと@VerticalRecordsにheaderLimit属性を追加しました。
+
+ []
+
+* {1.0.5 - 2008/08/02}
+
+ * setterメソッド+Position()メソッドでセル位置を取得できるようにしました。
+
+ * アノテーションに@Documentedを付与しました。
+
+ []
+
+* {1.0.4 - 2008/06/07}
+
+ * 繰り返し項目に配列を使った場合のバグ修正
+
+ []
+
+* {1.0.3 - 2007/07/04}
+
+ * @ColumnにheaderMerged属性を追加。
+
+ * @IterateTableを追加。
+
+ * @MapColumnsでMapの実装クラスをHashMapからLinkedHashMapに変更し、Excel上での記述順を保持するようにしました。
+
+ * アノテーションとアノテーションプロセッサを外部から追加できるようにしました。
+
+ []

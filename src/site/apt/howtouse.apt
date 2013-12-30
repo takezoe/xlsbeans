@@ -1,0 +1,517 @@
+            ------
+            基本的な使い方
+            ------
+            Naoki Takezoe
+            ------
+            2011-07-06
+
+XLSBeans
+
+%{toc|section=1|fromDepth=1|toDepth=3}
+
+* {基本的な使い方}
+
+ XLSBeansはアノテーションを付与してJavaBeansとExcelをマッピングするライブラリです。以下のアノテーションが利用可能です。
+
+ [Note] XLSBeans 1.1.0以降ではアクセサメソッドの代わりにpublicフィールドにアノテーションを付与することもできます。
+        以下のリファレンスでsetterメソッドに付与することが可能なアノテーションはpublicフィールドにも付与することができます。
+
+** {@Sheet}
+
+ 読み込むシートをシート番号、シート名、シート名に対する正規表現のいずれかで指定します。クラスに付与します。
+
+--------
+/** シート番号で指定する場合 */
+@Sheet(number=0)
+public class SheetObject {
+  ...
+}
+--------
+
+--------
+/** シート名で指定する場合 */
+@Sheet(name="Users")
+public class SheetObject {
+  ...
+}
+--------
+
+--------
+/** 正規表現で指定する場合 */
+@Sheet(regex="Sheet_[0-9]+")
+public class SheetObject {
+  ...
+}
+--------
+
+ 正規表現で指定する場合はXLSBeans#loadMultiple()メソッドを用いることでマッチしたシートの情報を一度に取得することができます。
+
+** {@Cell}
+
+ セルの列、行を指定してBeanのプロパティにマッピングします。setterメソッドに対して付与します。
+
+--------
+@Sheet(name="Users")
+public class SheetObject {
+  @Cell(column=0, row=0)
+  public void setTitle(String title){
+    ...
+  }
+}
+--------
+
+** {@LabelledCell}
+
+ セルの文字列を指定し、その左右もしくは下側のセルの値をマッピングします。setterメソッドに対して付与します。
+
+--------
+@Sheet(name="Users")
+public class SheetObject {
+  @LabelledCell(label="Title", type=LabelledCellType.Right)
+  public void setTitle(String title){
+    ...
+  }
+}
+--------
+
+ range属性を指定すると、type属性の方向に向かって指定したセル数分を検索し、最初に発見した空白以外のセルの値を取得します。
+
+--------
+@Sheet(name="Users")
+public class SheetObject {
+  @LabelledCell(label="Title", type=LabelledCellType.Right, range=3)
+  public void setTitle(String title){
+    ...
+  }
+}
+--------
+
+ 同じラベルのセルが複数ある場合は、領域の見出しをheaderLabel属性で指定します。
+ headerLabel属性で指定されたセルからlabel属性で指定されたセルを下方向に検索し、最初に見つかったセルをラベルセルとして使用します。
+
+[images/LabelledCell_headerLabel.png] LabelledCell
+
+--------
+@LabelledCell(label="クラス名", type=LabelledCellType.Right, headerLabel="アクション")
+public void setActionClassName(String actionClassName){
+  ...
+}
+@LabelledCell(label="クラス名", type=LabelledCellType.Right, headerLabel="アクションフォーム")
+public void setFormClassName(String formClassName){
+  ...
+}
+--------
+
+ skip属性を指定することで、ラベルセルから指定したセル数分離れたセルの値をマッピングすることができます。
+
+--------
+// クラス名というセルから右側に2つ離れたセルの値をマッピング
+@LabelledCell(label="クラス名", type=LabelledCellType.Right, skip=2)
+public void setActionClassName(String actionClassName){
+  ...
+}
+--------
+
+ セルが見つからなかった場合はエラーとなりますが、optional属性にtrueを指定しておくと、無視して処理を続行します。
+
+** {@SheetName}
+
+ シート名をString型のプロパティにマッピングします。
+
+--------
+@Sheet(name="Users")
+public class SheetObject {
+  @SheetName
+  public void setSheetName(String sheetName){
+    ...
+  }
+}
+--------
+
+** {@HorizontalRecords}
+
+ 水平方向に連続する行をListまたは配列にマッピングします。表には最上部にテーブルの名称と列名を記述した行が必要になります。
+
+[images/HorizontalRecord.png] HorizontalRecord
+
+ tableLabel属性でテーブルの名称を指定します。List型または配列の引数を1つだけ取るsetterメソッドに対して付与します。
+
+--------
+@Sheet(name="Users")
+public class SheetObject {
+  @HorizontalRecords(tableLabel="ユーザ一覧", recordClass=Record.class)
+  public void setRecords(List<Record> records){
+    ...
+  }
+}
+--------
+
+ デフォルトでは行に1つもデータが存在しない場合、そのテーブルの終端となります。
+ 行の一番左側の列のボーダーによってテーブルの終端を検出する方法もあります。
+ この場合は@HorizontalRecordsのterminal属性にRecordTerminal.Borderを指定してください。
+
+--------
+@Sheet(name="Users")
+public class SheetObject {
+  @HorizontalRecords(tableLabel="Horizontal Records", recordClass=Record.class,
+            terminal=RecordTerminal.Border)
+  public void setRecords(List<Record> records){
+    ...
+  }
+}
+--------
+
+ テーブルが他のテーブルと連続しておりterminal属性でBorder、Emptyのいずれを指定しても終端を検出できない場合があります。
+ このような場合はterminateLabel属性で終端を示すセルの文字列を指定します。
+
+--------
+@Sheet(name="Users")
+public class SheetObject {
+  @HorizontalRecords(tableLabel="Horizontal Records", recordClass=Record.class,
+            terminateLabel="Terminate")
+  public void setRecords(List<Record> records){
+    ...
+  }
+}
+--------
+
+ headerLimit属性を指定すると、テーブルのカラムが指定数見つかったタイミングでExcelシートの走査を終了します。
+ 主に無駄な走査を抑制したい場合にしますが、@IterateTables使用時に、テーブルが隣接しており終端を検出できない場合などに
+ カラム数を明示的に指定してテーブルの区切りを指定する場合にも使用できます。
+
+ たとえば以下の例は、カラムのヘッダを4つ分検出したところでそのテーブルの終端と見なします。
+
+--------
+@Sheet(name="Users")
+public class SheetObject {
+  @HorizontalRecords(tableLabel="Horizontal Records", recordClass=Record.class,
+            terminal=RecordTerminal.Border, headerLimit=4)
+  public void setRecords(List<Record> records){
+    ...
+  }
+}
+--------
+
+ なお、セルが見つからなかった場合はエラーとなりますが、optional属性にtrueを指定しておくと、無視して処理を続行します。
+
+** {@VerticalRecords}
+
+ 垂直方向に連続する列をListまたは配列にマッピングします。要するに@HorizontalRecordsを縦方向にしたものです。
+ @HorizontalRecordsと同じくList型の引数を1つだけ取るsetterメソッドに対して付与します。
+
+--------
+@Sheet(name="Users")
+public class SheetObject {
+  @VerticalRecords(tableLabel="Vertical Records", recordClass=Record.class)
+  public void setRecords(List<Record> records){
+    ...
+  }
+}
+--------
+
+ @HorizontalRecordsと同じくterminal属性、およびoptional属性を指定することもできます。
+
+** {@Column}
+
+ @HorizontalRecordsまたは@VerticalRecordsで指定されたクラスのプロパティをカラム名にマッピングします。
+ setterメソッドに対して付与します。
+
+--------
+public class Record {
+  @Column(columnName="ID")
+  public void setId(String id){
+    ...
+  }
+}
+--------
+
+ 同じ値がグループごとに結合されているカラムの場合はmerged属性をtrueに設定します。
+ こうしておくと、前の列の値が引き継がれて設定されます。
+
+--------
+public class Record {
+  @Column(columnName="Gender", merged=true)
+  public void setId(String id){
+    ...
+  }
+}
+--------
+
+ 見出し行が結合され、1つの見出しに対して複数の列が存在する場合はheaderMergedプロパティを使用します。
+ headerMergedの値には列見出しから何セル分離れているかを指定します。
+
+[images/Column_headerMerged.png] Column
+
+--------
+public class User {
+  @Column(columnName="連絡先")
+  public void setMailAddress(String mailAddress){
+    ...
+  }
+  @Column(columnName="連絡先", headerMerged=1)
+  public void setTel(String tel){
+    ...
+  }
+}
+--------
+
+** {@MapColumns}
+
+ @HorozintalRecordもしくは@VerticalRecordでカラム数が可変の場合に、
+ それらのカラムをMapとして設定します。BeanにはMapを引数に取るセッターメソッドを用意し、このアノテーションを記述します。
+
+[images/MapColumns.png] MapColumns
+
+--------
+@MapColumns(previousColumnName="名前")
+public void setAttributes(Map attributes){
+  this.attributes = attributes
+}
+--------
+
+ previousColumnName属性で指定された次のカラム以降、カラム名をキーとしたMapが生成され、Beanにセットされます。
+
+** {@PostProcess}
+
+ @Sheetを付与したクラス、もしくは@HorizontalRecordsや@VerticalRecordsで指定したレコードクラスのメソッドに付与しておくと、
+ シートの読み込みが終了した時点で呼び出されます。
+ なお、このアノテーションを付与するメソッドは引数を取らないpublicメソッドである必要があります。
+
+--------
+@Sheet(name="Users")
+public class SheetObject {
+  @PostProcess
+  public void postProcess(){
+    ...
+  }
+}
+--------
+
+** {@IterateTables}
+
+ 同一の構造の表がシート内で繰り返し出現する場合に使用します。
+ tableLabelプロパティで繰り返し部分の見出しラベル、tableClassプロパティで繰り返し部分の情報を格納するJavaBeanを指定します。
+ また、bottomプロパティは@IterateTables内で@HorizontalRecordを使用する場合に、
+ テーブルの開始位置が@IterateTablesの見出しセルからどれだけ離れているかを指定します。
+
+[images/IterateTables.png] IterateTables
+
+--------
+@Sheet(name="シート名")
+public class SheetObject {
+  @IterateTables(tableLabel="部門情報", tableClass=Unit.class, bottom=2)
+  public void setUnits(List&lt;Unit&gt; units){
+    ...
+  }
+}
+--------
+
+ 繰り返し部分に対応するJavaBeanでは以下のように@LabelledCellや@HorizontalRecordなどのアノテーションを使用することができます。
+ @HorizontalRecordを使用する場合、tableLabelプロパティには@IterateTablesのtableLabelプロパティで指定したラベルと同じラベルを
+ 指定する必要がある点に注意してください。
+
+--------
+public class Unit {
+  @LabelledCell(label="部門名", type=LabelledCellType.Right)
+  public void setUnitName(String unitName) {
+    ...
+  }
+  @HorizontalRecords(tableLabel="部門情報", recordClass=UnitUser.class)
+  public void setUnitUsers(List&lt;UnitUser&gt; unitUsers) {
+    this.unitUsers = unitUsers;
+  }
+}
+--------
+
+ 繰り返し部分に対応するJavaBeanで@HorizontalRecordを使用した場合、通常の場合と同じく@Columnで列とのマッピングを行います。
+
+--------
+public class UnitUser {
+  @Column(columnName="ID")
+  public void setId(String id) {
+    ...
+  }
+  @Column(columnName="名前")
+  public void setName(String name) {
+    ...
+  }
+}
+--------
+
+** {読み込み方}
+
+ 以下のようにして読み込みを行います。
+
+--------
+SheetObject sheet = new XLSBeans().load(
+    new FileInputStream("example.xls"), SheetObject.class);
+--------
+
+ なお、@Cell, @LabelledCell, @Columnアノテーションでマッピングするプロパティに関しては、
+ 現時点ではString型、プリミティブ型、プリミティブ型のラッパー型のいずれかである必要があります。
+ より具体的な使用例はXLSBeansのディストリビューションに同梱されているテストケースのソースコードをご覧ください。
+
+ XLSBeansはデフォルトではJava Excel APIを使用してExcelファイルの読み込みを行いますが、
+ load()もしくはloadMultiple()メソッドの引数にオプションを指定することで読み込みにApache POIを使用することができます。
+
+--------
+// Excel2007形式のファイルを読み込む場合
+SheetObject sheet = new XLSBeans().load(
+    new FileInputStream("example.xls"), SheetObject.class, WorkbookFinder.TYPE_XSSF);
+--------
+
+ オプションとして指定可能な値は以下の通りです。
+
+ * WorkbookFinder.TYPE_JXL - Java Excel APIを使用してExcel2003形式（xls）のファイルを読み込み
+
+ * WorkbookFinder.TYPE_HSSF - Apache POIを使用してExcel2003形式（xls）のファイルを読み込み
+
+ * WorkbookFinder.TYPE_XSSF - Apache POIを使用してExcel2007形式（xlsx）のファイルを読み込み
+
+ []
+
+* {シート上の位置情報の取得}
+
+ アノテーションを付与したsetterメソッド名+Positionというメソッドを用意しておくと、
+ マッピングされたセル上の位置を取得することができます。
+
+--------
+@LabelledCell(label="Name")
+public void setName(String name){
+  ...
+}
+
+public void setNamePosition(int x, int y){
+  ...
+}
+--------
+
+ 位置情報を取得用のsetterメソッドは以下のいずれかの引数を取る必要があります。
+
+ * int x, int y
+
+ * java.awt.Point
+
+ []
+
+ [Note] publicフィールドを使用する場合は<code>java.awt.Point</code>型のフィールドを用意してください。
+
+* {XMLファイルによるマッピング}
+
+ アノテーションだけではなく、外部XMLファイルでマッピングを行うことも可能です。
+ これはダイナミック・アノテーションという、アノテーションと同様の情報をXMLファイルで定義することで行います。
+ 以下にクラスに対してアノテーションを付与するXMLファイルの例を示します。
+
+--------
+<?xml version="1.0" encoding="utf-8"?>
+<annotations>
+  <class name="net.java.amateras.xlsbeans.example.SheetObject">
+    <annotation name="net.java.amateras.xlsbeans.annotation.Sheet">
+      <attribute name="name">'Users'</attribute>
+    </annotation>
+  </class>
+</annotations>
+--------
+
+ アノテーションの属性値の指定にはOGNL式を使用します。メソッドにアノテーションを付与する場合は次のようになります。
+
+--------
+<?xml version="1.0" encoding="utf-8"?>
+<annotations>
+  <class name="net.java.amateras.xlsbeans.example.SheetObject">
+    <annotation name="net.java.amateras.xlsbeans.annotation.Sheet">
+      <attribute name="name">'Users'</attribute>
+    </annotation>
+    <method name="setTitle">
+      <annotation name="net.java.amateras.xlsbeans.annotation.LabelledCell">
+        <attribute name="label">'Title'</attribute>
+        <attribute name="type">@net.java.amateras.xlsbeans.annotation.LabelledCellType@Right</attribute>
+      </annotation>
+    </method>
+  </class>
+</annotations>
+--------
+
+ XLSBeansでは使用しませんが、フィールドにアノテーションを付与することも可能です。
+
+--------
+<?xml version="1.0" encoding="utf-8"?>
+<annotations>
+  <class name="net.java.amateras.xlsbeans.example.SheetObject">
+    <field name="setTitle">
+      <annotation name="...">
+        ...
+      </annotation>
+    </field>
+  </class>
+</annotations>
+--------
+
+ 外部XMLファイルを使う場合、ハードコードされたアノテーションを外部XMLファイルの内容でオーバーライドすることが可能です。
+ 読み込み時は以下のようにExcelファイルとXMLファイルの両方をXMLBeans#load()メソッドに渡します。
+
+--------
+SheetObject sheet = new XLSBeans().load(
+  new FileInputStream("example.xls"),
+  new FileInputStream("example.xml"), SheetObject.class);
+--------
+
+ なお、AnnotationReaderクラスを使用することで、XLSBeansのダイナミック・アノテーション機能を別のプログラムでも利用することが可能です。
+
+--------
+// XMLファイルの読み込み
+XMLInfo info = XMLLoader.load(new FileInputStream("example.xml"));
+
+// AnnotationReaderのインスタンスを作成
+AnnotationReader reader = new AnnotationReader(info);
+
+// SheetObjectクラスに付与されたSheetアノテーションを取得
+Sheet sheet = reader.getAnnotation(SheetObject.class, Sheet.class);
+--------
+
+ ClassやMethod、Fieldオブジェクトから直接アノテーションを取得する代わりにAnnotationReaderを使えば、
+ XMLで宣言されたアノテーションと、クラスに埋め込まれているアノテーションを区別せずに取得することができます。
+ AnnotationReaderにはこの他にもメソッド、フィールドに付与されたアノテーションを取得するためのメソッドも用意されています。
+
+* {FieldProcessorの拡張}
+
+ XLSBeansではFieldProcessorインターフェースを実装したクラスによってアノテーションの処理を行います。
+ デフォルトではこのドキュメントに記述されているアノテーション用のFieldProcessorが用意されていますが、
+ 独自アノテーションを定義しこれに対応したFieldProcessorをXLSBeansに追加することが可能です。
+
+ 独自のアノテーションおよび、FieldProcessorをXLSBeansに登録するにはクラスパスのルートにxlsbeans.propertiesというプロパティファイルを作成し、
+ アノテーションのクラス名とFieldProcessor実装クラスのクラス名を以下のように列挙します。
+ なお、この方法で登録を行う場合、FieldProcessor実装クラスは引数なしのコンストラクタを持っている必要がある点に注意してください。
+
+--------
+# アノテーションのクラス名 = FieldProcessorのクラス名
+xlsbeans.sample.SampleAnnotation = xlsbeans.sample.SampleFieldProcessor
+--------
+
+ また、Javaソースコード中で直接ファクトリにFieldProcessor実装クラスを登録することも可能です。
+
+--------
+FieldProcessorFactory.registerProcessor(
+    SampleAnnotation.class, new SampleFieldProcessor());
+--------
+
+* {publicフィールドの利用}
+
+ XLSBeans 1.0.0以降では、アクセサメソッドの代わりにpublicフィールドを使用することができます。
+ たとえば、以下のような@Cellアノテーションが付与されたプロパティがあるとします。
+
+--------
+@Cell(column=0, row=0)
+public void setTitle(String title){
+  ...
+}
+--------
+
+ これはpublicフィールドを使うと以下のように記述することができます。
+ アクセサメソッドを実装しなくてもよい分、コードがすっきりして見通しがよくなります。
+
+--------
+@Cell(column=0, row=0)
+public String title;
+--------
+

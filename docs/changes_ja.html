@@ -1,0 +1,64 @@
+<html>
+<head>
+  <meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=Windows-31J">
+  <title>XLSBeans - Excel to POJO Mapping</title>
+  <script src="prettify.js" type="text/javascript"></script>
+  <link href="prettify.css" rel="stylesheet" type="text/css"/>
+  <link rel="stylesheet" type="text/css" href="xlsbeans.css">
+</head>
+<body onload="prettyPrint()">
+<h1>XLSBeans変更履歴</h1>
+
+<h2>1.2.1 - 2011/07/05</h2>
+<ul>
+  <li>POI使用時に数式のセルの値の取得時にエラーが発生する問題を修正。</li>
+</ul>
+
+<h2>1.2.0 - 2010/07/03</h2>
+<ul>
+  <li>Excel2007に対応しました。</li>
+  <li>JavaExcel APIでの文字化けに対応しました。</li>
+</ul>
+
+<h2>1.1.0 - 2010/03/14</h2>
+<ul>
+  <li>publicフィールドをサポートしました。</li>
+  <li>DynamicAnnotationBuilderにクラスローダがセットされていない場合、コンテキストクラスローダを使用するようにしました。</li>
+</ul>
+
+<h2>1.0.7 - 2008/12/23</h2>
+<ul>
+  <li>DynamicAnnotationBuilderにOGNLで使用するためのクラスローダを指定できるようにしました。</li>
+  <li>@LabelledCellにskip属性を追加しました。</li>
+  <li>@IterateTablesにoptional属性を追加しました。</li>
+</ul>
+
+<h2>1.0.6 - 2008/11/24</h2>
+<ul>
+  <li>@HorizontalRecordsと@VerticalRecordsの処理を高速化しました。</li>
+  <li>XMLによるアノテーションの指定時にJavassistではなくProxyを使うようにしました（Javassistは不要になりました）。 </li>
+  <li>@HorizontalRecordsと@VerticalRecordsにheaderLimit属性を追加しました。</li>
+</ul>
+
+<h2>1.0.5 - 2008/08/02</h2>
+<ul>
+  <li>setterメソッド+Position()メソッドでセル位置を取得できるようにしました。</li>
+  <li>アノテーションに@Documentedを付与しました。</li>
+</ul>
+
+<h2>1.0.4 - 2008/06/07</h2>
+<ul>
+  <li>繰り返し項目に配列を使った場合のバグ修正</li>
+</ul>
+
+<h2>1.0.3 - 2007/07/04</h2>
+<ul>
+  <li>@ColumnにheaderMerged属性を追加。</li>
+  <li>@IterateTableを追加。</li>
+  <li>@MapColumnsでMapの実装クラスをHashMapからLinkedHashMapに変更し、Excel上での記述順を保持するようにしました。</li>
+  <li>アノテーションとアノテーションプロセッサを外部から追加できるようにしました。</li>
+</ul>
+
+</body>
+</html>
+
