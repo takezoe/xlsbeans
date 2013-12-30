@@ -4,7 +4,7 @@ XLSBeans
 XLSBeans is a Java library for mapping Excel sheets to POJO.
 
 
-### Setup
+## Setup
 
 To use XLSBeans, add the following dependency to your pom.xml:
 
@@ -26,7 +26,7 @@ To use XLSBeans, add the following dependency to your pom.xml:
 </dependencies>
 ```
 
-### Getting Started
+## Getting Started
 
 For example, here is one Excel sheet.
 
