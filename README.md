@@ -21,7 +21,7 @@ To use XLSBeans, add the following dependency to your pom.xml:
   <dependency>
     <groupId>jp.sf.amateras.xlsbeans</groupId>
     <artifactId>xlsbeans</artifactId>
-    <version>1.2.2</version>
+    <version>1.2.3</version>
   </dependency>
 </dependencies>
 ```
