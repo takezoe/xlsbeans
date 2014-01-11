@@ -6,15 +6,15 @@ import net.java.amateras.xlsbeans.annotation.Column;
 
 public class UnitUser {
 
-	private String id;
+	private int id;
 	private String name;
 	private Point namePosition;
 
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 	@Column(columnName="ID")
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 	public String getName() {

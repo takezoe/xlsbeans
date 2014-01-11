@@ -19,8 +19,7 @@ import net.java.amateras.xlsbeans.annotation.VerticalRecords;
  */
 public class FieldProcessorFactory {
 	
-	private static ConcurrentHashMap<Class<? extends Annotation>, FieldProcessor>
-		map = new ConcurrentHashMap<Class<? extends Annotation>, FieldProcessor>();
+	private static ConcurrentHashMap<Class<? extends Annotation>, FieldProcessor> map = new ConcurrentHashMap<Class<? extends Annotation>, FieldProcessor>();
 	
 	static {
 		map.put(Cell.class, new CellProcessor());
@@ -31,8 +30,7 @@ public class FieldProcessorFactory {
 		map.put(IterateTables.class, new IterateTablesProcessor());
 		
 		try {
-			InputStream in = FieldProcessorFactory.class.getResourceAsStream(
-					"/xlsbeans.properties");
+			InputStream in = FieldProcessorFactory.class.getResourceAsStream("/xlsbeans.properties");
 			if(in != null){
 				Properties props = new Properties();
 				props.load(in);
@@ -44,12 +42,8 @@ public class FieldProcessorFactory {
 				
 				for(Map.Entry<Object, Object> entry : props.entrySet()){
 					try {
-						Class<? extends Annotation> annoClazz
-							= clsLoader.loadClass((String)entry.getKey()).asSubclass(Annotation.class);					
-			            
-						Class<? extends FieldProcessor> procClazz = clsLoader.loadClass(
-			            		(String)entry.getValue()).asSubclass(FieldProcessor.class);
-			            
+						Class<? extends Annotation> annoClazz = clsLoader.loadClass((String)entry.getKey()).asSubclass(Annotation.class);
+						Class<? extends FieldProcessor> procClazz = clsLoader.loadClass((String) entry.getValue()).asSubclass(FieldProcessor.class);
 			            map.put(annoClazz, procClazz.newInstance());
 					} catch(Exception ex){
 						// TODO Logging or throw exception
@@ -69,8 +63,7 @@ public class FieldProcessorFactory {
 	 * @param ann the annotation type
 	 * @param processor the field processor which process the given annotation
 	 */
-	public static void registerProcessor(Class<? extends Annotation> ann, 
-			FieldProcessor processor){
+	public static void registerProcessor(Class<? extends Annotation> ann, FieldProcessor processor){
 		map.put(ann, processor);
 	}
 	

@@ -7,6 +7,7 @@ import java.util.List;
 
 import junit.framework.TestCase;
 import net.java.amateras.xlsbeans.NeedPostProcess;
+import net.java.amateras.xlsbeans.XLSBeansConfig;
 import net.java.amateras.xlsbeans.xml.AnnotationInfo;
 import net.java.amateras.xlsbeans.xml.AnnotationReader;
 import net.java.amateras.xlsbeans.xml.DynamicAnnotationBuilder;
@@ -29,14 +30,12 @@ public class FieldProcessorFactoryTest extends TestCase {
 	}
 
 	private class SampleFieldProcessor implements FieldProcessor {
-		public void doProcess(WSheet wSheet, Object obj, Method setter,
-				Annotation ann, AnnotationReader reader,
-				List<NeedPostProcess> needPostProcess) throws Exception {
+		public void doProcess(WSheet wSheet, Object obj, Method setter, Annotation ann, AnnotationReader reader,
+				XLSBeansConfig config, List<NeedPostProcess> needPostProcess) throws Exception {
 		}
 
-		public void doProcess(WSheet wSheet, Object obj, Field field,
-				Annotation ann, AnnotationReader reader,
-				List<NeedPostProcess> needPostProcess) throws Exception {
+		public void doProcess(WSheet wSheet, Object obj, Field field, Annotation ann, AnnotationReader reader,
+				XLSBeansConfig config, List<NeedPostProcess> needPostProcess) throws Exception {
 		}
 	}
 }

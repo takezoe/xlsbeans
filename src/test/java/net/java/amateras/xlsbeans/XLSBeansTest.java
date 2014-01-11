@@ -578,6 +578,86 @@ public class XLSBeansTest extends TestCase {
 														// jxl's)
 	}
 
+	public void testNormalize() throws Exception {
+        XLSBeans xlsBeans = new XLSBeans();
+
+        XLSBeansConfig config = new XLSBeansConfig();
+        config.setNormalizeLabelText(true);
+        xlsBeans.setConfig(config);
+
+		UserList userList = xlsBeans.load(
+                XLSBeansTest.class.getResourceAsStream("example_4.xls"),
+                XLSBeansTest.class.getResourceAsStream("example_1.xml"),
+                UserList.class);
+
+		// DumpXLSBeans.showDump(userList);
+
+		assertEquals("User list2", userList.getTitle());
+		assertEquals("06/04/10", userList.getLastUpdate());
+
+		assertEquals(new Point(2, 23), userList.getUnitUsers().get(0)
+				.getUnitUsers().get(0).getNamePosition());
+		assertEquals(new Point(2, 24), userList.getUnitUsers().get(0)
+				.getUnitUsers().get(1).getNamePosition());
+
+		assertEquals(new Point(2, 29), userList.getUnitUsers().get(1)
+				.getUnitUsers().get(0).getNamePosition());
+		assertEquals(new Point(2, 30), userList.getUnitUsers().get(1)
+				.getUnitUsers().get(1).getNamePosition());
+
+		// ////////////////////////////////////////////////////////
+		List<User> hUsers = userList.getHorizontalUsers();
+		assertEquals(4, hUsers.size());
+
+		assertEquals(1, hUsers.get(0).getId());
+		assertEquals("male", hUsers.get(0).getGender());
+		assertEquals("Ken", hUsers.get(0).getName());
+		assertEquals("Edgar", hUsers.get(0).getFamilyName());
+
+		assertEquals(2, hUsers.get(1).getId());
+		assertEquals("male", hUsers.get(1).getGender());
+		assertEquals("John", hUsers.get(1).getName());
+		assertEquals("Woodgate", hUsers.get(1).getFamilyName());
+
+		assertEquals(3, hUsers.get(2).getId());
+		assertEquals("male", hUsers.get(2).getGender());
+		assertEquals("Mat", hUsers.get(2).getName());
+		assertEquals("Brown", hUsers.get(2).getFamilyName());
+
+		assertEquals(4, hUsers.get(3).getId());
+		assertEquals("female", hUsers.get(3).getGender());
+		assertEquals("Nancy", hUsers.get(3).getName());
+		assertEquals("Davis", hUsers.get(3).getFamilyName());
+
+		// ////////////////////////////////////////////////////////
+		List<User> vUsers = userList.getVerticalUsers();
+		assertEquals(4, vUsers.size());
+
+		assertEquals(1, vUsers.get(0).getId());
+		assertEquals("male", vUsers.get(0).getGender());
+		assertEquals("Ken", vUsers.get(0).getName());
+		assertEquals("Edgar", vUsers.get(0).getFamilyName());
+
+		assertEquals(2, vUsers.get(1).getId());
+		assertEquals("", vUsers.get(1).getGender());
+		assertEquals("John", vUsers.get(1).getName());
+		assertEquals("Woodgate", vUsers.get(1).getFamilyName());
+
+		assertEquals(3, vUsers.get(2).getId());
+		assertEquals("", vUsers.get(2).getGender());
+		assertEquals("Mat", vUsers.get(2).getName());
+		assertEquals("Brown", vUsers.get(2).getFamilyName());
+
+		assertEquals(4, vUsers.get(3).getId());
+		assertEquals("female", vUsers.get(3).getGender());
+		assertEquals("Nancy", vUsers.get(3).getName());
+		assertEquals("Davis", vUsers.get(3).getFamilyName());
+
+		// ////////////////////////////////////////////////////////
+		assertEquals("sample.SampleAction", userList.getActionClassName());
+		assertEquals("sample.SampleForm", userList.getFormClassName());
+	}
+
 	public static void main(String[] args) throws Exception {
 		XLSBeansTest example = new XLSBeansTest();
 		example.test1();

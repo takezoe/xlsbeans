@@ -28,7 +28,7 @@ import net.java.amateras.xlsbeans.xssfconverter.WorkbookFinder;
  */
 public class XLSBeans {
 
-	private boolean ignoreSheetNotFound = false;
+    private XLSBeansConfig config = new XLSBeansConfig();
 
 	/**
 	 * Constructor.
@@ -37,13 +37,9 @@ public class XLSBeans {
 		super();
 	}
 
-	public void setIgnoreSheetNotFound(boolean flag){
-		ignoreSheetNotFound = flag;
-	}
-
-	public boolean isIgnoreSheetNotFound(){
-		return ignoreSheetNotFound;
-	}
+    public void setConfig(XLSBeansConfig config){
+        this.config = config;
+    }
 
 	/**
 	 * Loads one sheet as the single object from the Excel file.
@@ -82,8 +78,8 @@ public class XLSBeans {
 			for(Method method : clazz.getMethods()){
 				for(Annotation ann : reader.getAnnotations(clazz, method)){
 					FieldProcessor processor = FieldProcessorFactory.getProcessor(ann);
-					if(processor!=null){
-						processor.doProcess(wSheet, obj, method, ann, reader, needPostProcess);
+					if(processor != null){
+						processor.doProcess(wSheet, obj, method, ann, reader, config, needPostProcess);
 						break;
 					} else if(ann instanceof PostProcess){
 						NeedPostProcess post = new NeedPostProcess(obj, method);
@@ -96,8 +92,8 @@ public class XLSBeans {
 			for(Field field : clazz.getFields()){
 				for(Annotation ann : reader.getAnnotations(clazz, field)){
 					FieldProcessor processor = FieldProcessorFactory.getProcessor(ann);
-					if(processor!=null){
-						processor.doProcess(wSheet, obj, field, ann, reader, needPostProcess);
+					if(processor != null){
+						processor.doProcess(wSheet, obj, field, ann, reader, config, needPostProcess);
 						break;
 					}
 				}
@@ -109,7 +105,7 @@ public class XLSBeans {
 
 		} catch(InvocationTargetException ex){
 			Throwable t = ex.getCause();
-			if(t!=null && t instanceof Exception){
+			if(t != null && t instanceof Exception){
 				throw (Exception)t;
 			}
 			throw ex;
@@ -119,19 +115,19 @@ public class XLSBeans {
 	}
 
 	private WSheet[] findSheet(WWorkbook w, Sheet sheet) throws XLSBeansException {
-		if(sheet==null){
+		if(sheet == null){
 			throw new XLSBeansException("Can't find @Sheet.");
 		}
 
 //		jxl.Sheet jxlSheet = null;
 		if(sheet.name().length() > 0){
 			WSheet wSheet = w.getSheet(sheet.name());
-			if(wSheet==null){
+			if(wSheet == null){
 				throw new SheetNotFoundException(sheet.name());
 			}
 			return new WSheet[]{wSheet};
 
-		} else if(sheet.number()!=-1){
+		} else if(sheet.number() != -1){
 			if(sheet.number() >= w.getSheets().length){
 				throw new SheetNotFoundException(sheet.number());
 			}
@@ -184,7 +180,7 @@ public class XLSBeans {
 	public <P> P load(InputStream xlsIn, InputStream xmlIn, Class<P> clazz, String bookType) throws XLSBeansException {
 		try {
 			XMLInfo info = null;
-			if(xmlIn!=null){
+			if(xmlIn != null){
 				info = XMLLoader.load(xmlIn);
 			}
 
@@ -193,7 +189,7 @@ public class XLSBeans {
 			WWorkbook w = WorkbookFinder.find(xlsIn, bookType);
 
 			Sheet sheet = reader.getAnnotation(clazz, Sheet.class);
-			if(sheet==null){
+			if(sheet == null){
 				throw new XLSBeansException("Can't find @Sheet.");
 			}
 			try {
@@ -201,7 +197,7 @@ public class XLSBeans {
 				return loadSheet(clazz, jxlSheets[0], reader);
 
 			} catch(SheetNotFoundException ex){
-				if(ignoreSheetNotFound){
+				if(config.isIgnoreSheetNotFound()){
 					return null;
 				} else {
 					throw ex;
@@ -258,7 +254,7 @@ public class XLSBeans {
 	public <P> P[] loadMultiple(InputStream xlsIn, InputStream xmlIn, Class<P> clazz, String bookType) throws XLSBeansException {
 		try {
 			XMLInfo info = null;
-			if(xmlIn!=null){
+			if(xmlIn != null){
 				info = XMLLoader.load(xmlIn);
 			}
 
@@ -266,13 +262,13 @@ public class XLSBeans {
 			WWorkbook w = WorkbookFinder.find(xlsIn, bookType);
 
 			Sheet sheet = reader.getAnnotation(clazz, Sheet.class);
-			if(sheet==null){
+			if(sheet == null){
 				throw new XLSBeansException("Can't find @Sheet.");
 			}
 
 			List<P> list = new ArrayList<P>();
 
-			if(sheet.number()==-1 && sheet.name().length()==0 && sheet.regex().length()==0){
+			if(sheet.number() == -1 && sheet.name().length() == 0 && sheet.regex().length() == 0){
 				// If sheet isn't specified
 				WSheet[] sheets = w.getSheets();
 				for(WSheet wSheet : sheets){
@@ -285,7 +281,7 @@ public class XLSBeans {
 						list.add(loadSheet(clazz, wSheet, reader));
 					}
 				} catch(SheetNotFoundException ex){
-					if(!ignoreSheetNotFound){
+					if(!config.isIgnoreSheetNotFound()){
 						throw ex;
 					}
 				}
@@ -353,7 +349,7 @@ public class XLSBeans {
 	public Object[] loadMultiple(InputStream xlsIn, InputStream xmlIn, Class<?>[] classes, String bookType) throws XLSBeansException {
 		try {
 			XMLInfo info = null;
-			if(xmlIn!=null){
+			if(xmlIn != null){
 				info = XMLLoader.load(xmlIn);
 			}
 
@@ -365,7 +361,7 @@ public class XLSBeans {
 
 			for(Class<?> clazz : classes){
 				Sheet sheet = reader.getAnnotation(clazz, Sheet.class);
-				if(sheet==null){
+				if(sheet == null){
 					throw new XLSBeansException("Can't find @Sheet.");
 				}
 				try {
@@ -373,7 +369,7 @@ public class XLSBeans {
 						list.add(loadSheet(clazz, wSheet, reader));
 					}
 				} catch(SheetNotFoundException ex){
-					if(!ignoreSheetNotFound){
+					if(!config.isIgnoreSheetNotFound()){
 						throw ex;
 					}
 				}

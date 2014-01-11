@@ -20,17 +20,15 @@ import net.java.amateras.xlsbeans.xssfconverter.WSheet;
  */
 public class Utils {
 
-	protected static Method[] getMapColumnMethods(Object obj,
-			AnnotationReader reader) throws Exception {
+	protected static Method[] getMapColumnMethods(Object obj, AnnotationReader reader) throws Exception {
 
 		List<Method> result = new ArrayList<Method>();
 		Method[] methods = obj.getClass().getMethods();
-		for(int i=0;i<methods.length;i++){
-			if(methods[i].getName().startsWith("set") &&
-					methods[i].getParameterTypes().length==1){
+		for(int i = 0; i < methods.length; i++){
+			if(methods[i].getName().startsWith("set") && methods[i].getParameterTypes().length == 1){
 				Annotation[] anns = reader.getAnnotations(obj.getClass(), methods[i]);
 
-				for(int j=0;j<anns.length;j++){
+				for(int j = 0; j < anns.length; j++){
 					if(anns[j] instanceof MapColumns){
 						result.add(methods[i]);
 					}
@@ -40,15 +38,14 @@ public class Utils {
 		return result.toArray(new Method[result.size()]);
 	}
 
-	protected static Field[] getMapColumnFields(Object obj,
-			AnnotationReader reader) throws Exception {
+	protected static Field[] getMapColumnFields(Object obj, AnnotationReader reader) throws Exception {
 
 		List<Field> result = new ArrayList<Field>();
 		Field[] fields = obj.getClass().getFields();
-		for(int i=0;i<fields.length;i++){
+		for(int i = 0; i < fields.length; i++){
 			Annotation[] anns = reader.getAnnotations(obj.getClass(), fields[i]);
 
-			for(int j=0;j<anns.length;j++){
+			for(int j = 0; j < anns.length; j++){
 				if(anns[j] instanceof MapColumns){
 					result.add(fields[i]);
 				}
@@ -57,8 +54,7 @@ public class Utils {
 		return result.toArray(new Field[result.size()]);
 	}
 
-	public static List<Object> getMapColumnProperties(Object obj,
-			AnnotationReader reader) throws Exception {
+	public static List<Object> getMapColumnProperties(Object obj, AnnotationReader reader) throws Exception {
 
 		List<Object> list = new ArrayList<Object>();
 
@@ -74,22 +70,19 @@ public class Utils {
 
 	}
 
-	protected static Method[] getColumnMethods(
-			Object obj, String name, AnnotationReader reader) throws Exception {
-
+	protected static Method[] getColumnMethods(Object obj, String name, AnnotationReader reader, XLSBeansConfig config) throws Exception {
 		List<Method> result = new ArrayList<Method>();
 		Method[] methods = obj.getClass().getMethods();
-		for(int i=0;i<methods.length;i++){
-			if(methods[i].getName().startsWith("set") &&
-					methods[i].getParameterTypes().length==1){
+		for(int i = 0; i < methods.length;i ++){
+			if(methods[i].getName().startsWith("set") && methods[i].getParameterTypes().length == 1){
 				Annotation[] anns = reader.getAnnotations(obj.getClass(), methods[i]);
-				for(int j=0;j<anns.length;j++){
+				for(int j = 0; j < anns.length; j++){
 					if(anns[j] instanceof Column){
-						Column column = (Column)anns[j];
+						Column column = (Column) anns[j];
 						String columnName = column.columnName();
-						if(name==null){
+						if(name == null){
 							result.add(methods[i]);
-						} else if(columnName.equals(name)){
+						} else if(Utils.normalize(columnName, config).equals(name)){
 							result.add(methods[i]);
 						}
 					}
@@ -99,20 +92,18 @@ public class Utils {
 		return result.toArray(new Method[result.size()]);
 	}
 
-	protected static Field[] getColumnFields(
-			Object obj, String name, AnnotationReader reader) throws Exception {
-
+	protected static Field[] getColumnFields(Object obj, String name, AnnotationReader reader, XLSBeansConfig config) throws Exception {
 		List<Field> result = new ArrayList<Field>();
 		Field[] fields = obj.getClass().getFields();
-		for(int i=0;i<fields.length;i++){
+		for(int i = 0; i < fields.length; i++){
 			Annotation[] anns = reader.getAnnotations(obj.getClass(), fields[i]);
-			for(int j=0;j<anns.length;j++){
+			for(int j = 0; j < anns.length; j++){
 				if(anns[j] instanceof Column){
 					Column column = (Column)anns[j];
 					String columnName = column.columnName();
-					if(name==null){
+					if(name == null){
 						result.add(fields[i]);
-					} else if(columnName.equals(name)){
+					} else if(Utils.normalize(columnName, config).equals(name)){
 						result.add(fields[i]);
 					}
 				}
@@ -130,33 +121,32 @@ public class Utils {
 	 * @return list of column methods and fields
 	 * @throws Exception
 	 */
-	public static List<Object> getColumnProperties(
-			Object obj, String name, AnnotationReader reader) throws Exception {
+	public static List<Object> getColumnProperties(Object obj, String name, AnnotationReader reader, XLSBeansConfig config) throws Exception {
 
 		List<Object> list = new ArrayList<Object>();
 
-		for(Method method: getColumnMethods(obj, name, reader)){
+		for(Method method: getColumnMethods(obj, name, reader, config)){
 			list.add(method);
 		}
 
-		for(Field field: getColumnFields(obj, name, reader)){
+		for(Field field: getColumnFields(obj, name, reader, config)){
 			list.add(field);
 		}
 
 		return list;
 	}
 
-	public static WCell getCell(WSheet wSheet, String label, int from) throws XLSBeansException {
+	public static WCell getCell(WSheet wSheet, String label, int from, XLSBeansConfig config) throws XLSBeansException {
 		// If target Cell is not found, throws XLSBeansException.
-		return Utils.getCell(wSheet, label, from, true);
+		return Utils.getCell(wSheet, label, from, true, config);
 	}
 
-	public static WCell getCell(WSheet wSheet, String label, int from, boolean throwableWhenNotFound) throws XLSBeansException {
+	public static WCell getCell(WSheet wSheet, String label, int from, boolean throwableWhenNotFound, XLSBeansConfig config) throws XLSBeansException {
 		int rows = wSheet.getColumns();
-		for(int i=0;i<rows;i++){
+		for(int i = 0;i < rows; i++){
 			WCell[] columns = wSheet.getColumn(i);
-			for(int j=from;j<columns.length;j++){
-				if(columns[j].getContents().equals(label)){
+			for(int j = from; j < columns.length; j++){
+				if(normalize(columns[j].getContents(), config).equals(normalize(label, config))){
 					return columns[j];
 				}
 			}
@@ -167,47 +157,47 @@ public class Utils {
 		return null;
 	}
 
-	private static Object convertValue(Class<?> type, String value){
-		if(type.equals(String.class)){
-			return value;
-		} else if(type.equals(Integer.TYPE) || type.equals(Integer.class)){
-			if(value.length()==0){
-				value = "0";
-			}
-			return new Integer(value);
-		} else if(type.equals(Double.TYPE) || type.equals(Double.class)){
-			if(value.length()==0){
-				value = "0";
-			}
-			return new Double(value);
-		} else if(type.equals(Short.TYPE) || type.equals(Short.class)){
-			if(value.length()==0){
-				value = "0";
-			}
-			return new Short(value);
-		} else if(type.equals(Long.TYPE) || type.equals(Long.class)){
-			if(value.length()==0){
-				value = "0";
-			}
-			return new Long(value);
-		} else if(type.equals(Float.TYPE) || type.equals(Float.class)){
-			if(value.length()==0){
-				value = "0";
-			}
-			return new Float(value);
-		} else if(type.equals(Boolean.TYPE) || type.equals(Boolean.class)){
-			if(value.length()==0){
-				value = "false";
-			}
-			return new Boolean(value);
-		} else if(type.equals(Character.TYPE) || type.equals(Character.class)){
-			if(value.length()==0){
-				value = " ";
-			}
-			return new Character(value.charAt(0));
-		}
-		return null;
-	}
+//	private static Object convertValue(Class<?> type, String value, XLSBeansConfig config){
+//		if(type.equals(String.class)){
+//			return value;
+//		} else if(type.equals(Integer.TYPE) || type.equals(Integer.class)){
+//			if(value.length() == 0){
+//				value = "0";
+//			}
+//			return new Integer(value);
+//		} else if(type.equals(Double.TYPE) || type.equals(Double.class)){
+//			if(value.length() == 0){
+//				value = "0";
+//			}
+//			return new Double(value);
+//		} else if(type.equals(Short.TYPE) || type.equals(Short.class)){
+//			if(value.length() == 0){
+//				value = "0";
+//			}
+//			return new Short(value);
+//		} else if(type.equals(Long.TYPE) || type.equals(Long.class)){
+//			if(value.length() == 0){
+//				value = "0";
+//			}
+//			return new Long(value);
+//		} else if(type.equals(Float.TYPE) || type.equals(Float.class)){
+//			if(value.length() == 0){
+//				value = "0";
+//			}
+//			return new Float(value);
+//		} else if(type.equals(Boolean.TYPE) || type.equals(Boolean.class)){
+//			if(value.length() == 0){
+//				value = "false";
+//			}
+//			return new Boolean(value);
+//		} else if(type.equals(Character.TYPE) || type.equals(Character.class)){
+//			if(value.length() == 0){
+//				value = " ";
+//			}
+//			return new Character(value.charAt(0));
+//		}
+//		return null;
+//	}
 
 	/**
 	 * Invokes the setter method using reflection.
@@ -217,16 +207,14 @@ public class Utils {
 	 * @param value the value which is String, primitive types or wrapper types
 	 * @throws Exception
 	 */
-	public static void invokeSetter(Method setter,Object obj,String value) throws Exception {
+	public static void invokeSetter(Method setter, Object obj, String value, XLSBeansConfig config) throws Exception {
 		Class<?>[] types = setter.getParameterTypes();
-
 		if(types.length!=1){
 			return;
 		}
-
-		Object valueObject = convertValue(types[0], value);
+		Object valueObject =config.getConverter(types[0]).convert(value, config);
 		if(valueObject != null){
-			setter.invoke(obj, new Object[]{valueObject});
+			setter.invoke(obj, new Object[]{ valueObject });
 		}
 	}
 
@@ -238,10 +226,9 @@ public class Utils {
 	 * @param value the value which is String, primitive types or wrapper types
 	 * @throws Exception
 	 */
-	public static void setField(Field field,Object obj,String value) throws Exception {
+	public static void setField(Field field, Object obj, String value, XLSBeansConfig config) throws Exception {
 		Class<?> type = field.getType();
-
-		Object valueObject = convertValue(type, value);
+		Object valueObject = config.getConverter(type).convert(value, config);
 		if(valueObject != null){
 			field.set(obj, valueObject);
 		}
@@ -254,16 +241,15 @@ public class Utils {
      * NOTICE: When the cell object is specified for the third argument,
      * a lower right cell is scanned from the cell.
 	 *
-     * @param sheet JExcel Api sheet object.
-     * @param label Target cell label.
+	 * @param wSheet the sheet object.
+	 * @param label the target cell label.
      * @param after A lower right cell is scanned from this cell object.
      *
      * @return Target JExcel Api cell object.
      * @throws XLSBeansException This occures when the cell is not found.
 	 */
-	public static WCell getCell(WSheet wSheet, String label, WCell after)
-			throws XLSBeansException {
-		return getCell(wSheet, label, after, false);
+	public static WCell getCell(WSheet wSheet, String label, WCell after, XLSBeansConfig config) throws XLSBeansException {
+		return getCell(wSheet, label, after, false, config);
 	}
 
     /**
@@ -273,17 +259,17 @@ public class Utils {
      * NOTICE: When the cell object is specified for the third argument,
      * a lower right cell is scanned from the cell.
      *
-     * @param sheet JExcel Api sheet object.
-     * @param label Target cell label.
+	 * @param wSheet the sheet object.
+	 * @param label the target cell label.
      * @param after A lower right cell is scanned from the cell object.
-     * @param includeingAfter Is the third argument cell object scanned?
+     * @param includeAfter Is the third argument cell object scanned?
      *
      * @return Target JExcel Api cell object.
      * @throws XLSBeansException This occures when the cell is not found.
      */
     public static WCell getCell(WSheet wSheet, String label, WCell after,
-            boolean includeAfter) throws XLSBeansException {
-        return getCell(wSheet, label, after, includeAfter, true);
+            boolean includeAfter, XLSBeansConfig config) throws XLSBeansException {
+        return getCell(wSheet, label, after, includeAfter, true, config);
     }
 
 	/**
@@ -293,10 +279,10 @@ public class Utils {
      * NOTICE: When the cell object is specified for the third argument,
      * a lower right cell is scanned from the cell.
 	 *
-	 * @param sheet JExcel Api sheet object.
-	 * @param label Target cell label.
+	 * @param wSheet the sheet object.
+	 * @param label the target cell label.
 	 * @param after A lower right cell is scanned from the cell object.
-	 * @param includeingAfter Is the third argument cell object scanned?
+	 * @param includeAfter Is the third argument cell object scanned?
      * @param throwableWhenNotFound If this argument is true, throws XLSBeansException when
      * we can't find target cell.
      *
@@ -304,11 +290,11 @@ public class Utils {
 	 * @throws XLSBeansException This occures when the cell is not found.
 	 */
 	public static WCell getCell(WSheet wSheet, String label, WCell after,
-			boolean includeAfter, boolean throwableWhenNotFound) throws XLSBeansException {
+			boolean includeAfter, boolean throwableWhenNotFound, XLSBeansConfig config) throws XLSBeansException {
 
 		if (after == null) {
 			// Call XLSBeans#getCell() - method if third argument is null.
-			return Utils.getCell(wSheet, label, 0, throwableWhenNotFound);
+			return Utils.getCell(wSheet, label, 0, throwableWhenNotFound, config);
 		}
 
 		int columnStart = after.getColumn();
@@ -443,5 +429,12 @@ public class Utils {
 		setterName = setterName.replaceAll("^set", "");
 		return setterName.substring(0, 1).toLowerCase() + setterName.substring(1);
 	}
+
+    public static String normalize(String text, XLSBeansConfig config){
+        if(text != null && config.isNormalizeLabelText()){
+            return text.trim().replaceAll("[\n\r]", "").replaceAll("[\t 　]+", " ");
+        }
+        return text;
+    }
 
 }

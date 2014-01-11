@@ -7,6 +7,7 @@ import java.util.List;
 
 import net.java.amateras.xlsbeans.NeedPostProcess;
 import net.java.amateras.xlsbeans.Utils;
+import net.java.amateras.xlsbeans.XLSBeansConfig;
 import net.java.amateras.xlsbeans.xml.AnnotationReader;
 import net.java.amateras.xlsbeans.xssfconverter.WSheet;
 
@@ -17,18 +18,14 @@ import net.java.amateras.xlsbeans.xssfconverter.WSheet;
  */
 public class SheetNameProcessor implements FieldProcessor {
 
-	public void doProcess(WSheet wSheet, Object obj, Method setter,
-			Annotation cell, AnnotationReader reader,
-			List<NeedPostProcess> needPostProcess) throws Exception {
-
-		Utils.invokeSetter(setter, obj, wSheet.getName());
+	public void doProcess(WSheet wSheet, Object obj, Method setter, Annotation cell, AnnotationReader reader,
+                          XLSBeansConfig config, List<NeedPostProcess> needPostProcess) throws Exception {
+		Utils.invokeSetter(setter, obj, wSheet.getName(), config);
 	}
 
-	public void doProcess(WSheet wSheet, Object obj, Field field, Annotation ann,
-			AnnotationReader reader, List<NeedPostProcess> needPostProcess)
-			throws Exception {
-
-		Utils.setField(field, obj, wSheet.getName());
+	public void doProcess(WSheet wSheet, Object obj, Field field, Annotation ann, AnnotationReader reader,
+                          XLSBeansConfig config, List<NeedPostProcess> needPostProcess) throws Exception {
+		Utils.setField(field, obj, wSheet.getName(), config);
 	}
 
 }

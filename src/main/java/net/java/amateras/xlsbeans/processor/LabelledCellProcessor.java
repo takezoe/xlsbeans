@@ -7,6 +7,7 @@ import java.util.List;
 
 import net.java.amateras.xlsbeans.NeedPostProcess;
 import net.java.amateras.xlsbeans.Utils;
+import net.java.amateras.xlsbeans.XLSBeansConfig;
 import net.java.amateras.xlsbeans.XLSBeansException;
 import net.java.amateras.xlsbeans.annotation.LabelledCell;
 import net.java.amateras.xlsbeans.xml.AnnotationReader;
@@ -22,23 +23,20 @@ import net.java.amateras.xlsbeans.xssfconverter.WSheet;
  */
 public class LabelledCellProcessor implements FieldProcessor {
 
-	public void doProcess(WSheet wSheet, Object obj,
-			Method setter, Annotation ann, AnnotationReader reader,
-			List<NeedPostProcess> needPostProcess) throws Exception {
-		doProcess(wSheet, obj, setter, null, ann, reader, needPostProcess);
+	public void doProcess(WSheet wSheet, Object obj, Method setter, Annotation ann, AnnotationReader reader,
+                          XLSBeansConfig config, List<NeedPostProcess> needPostProcess) throws Exception {
+		doProcess(wSheet, obj, setter, null, ann, reader, config, needPostProcess);
 	}
 
-	public void doProcess(WSheet wSheet, Object obj, Field field, Annotation ann,
-			AnnotationReader reader, List<NeedPostProcess> needPostProcess)
-			throws Exception {
-		doProcess(wSheet, obj, null, field, ann, reader, needPostProcess);
+	public void doProcess(WSheet wSheet, Object obj, Field field, Annotation ann, AnnotationReader reader,
+                          XLSBeansConfig config, List<NeedPostProcess> needPostProcess) throws Exception {
+		doProcess(wSheet, obj, null, field, ann, reader, config, needPostProcess);
 	}
 
-	private void doProcess(WSheet wSheet, Object obj,
-			Method setter, Field field, Annotation ann, AnnotationReader reader,
-			List<NeedPostProcess> needPostProcess) throws Exception {
+	private void doProcess(WSheet wSheet, Object obj, Method setter, Field field, Annotation ann, AnnotationReader reader,
+                           XLSBeansConfig config, List<NeedPostProcess> needPostProcess) throws Exception {
 
-		LabelledCell cell = (LabelledCell)ann;
+		LabelledCell cell = (LabelledCell) ann;
 		WCell targetCell = null;
 
 		int column = -1;
@@ -50,12 +48,12 @@ public class LabelledCellProcessor implements FieldProcessor {
 		} else {
 			try {
 				if(cell.headerLabel().equals("")){
-					WCell labelCell = Utils.getCell(wSheet, cell.label(), 0);
+					WCell labelCell = Utils.getCell(wSheet, cell.label(), 0, config);
 					column = labelCell.getColumn();
 					row = labelCell.getRow();
 				} else {
-					WCell headerCell = Utils.getCell(wSheet, cell.headerLabel(), 0);
-					WCell labelCell = Utils.getCell(wSheet, cell.label(), headerCell.getRow() + 1);
+					WCell headerCell = Utils.getCell(wSheet, cell.headerLabel(), 0, config);
+					WCell labelCell = Utils.getCell(wSheet, cell.label(), headerCell.getRow() + 1, config);
 					column = labelCell.getColumn();
 					row = labelCell.getRow();
 				}
@@ -92,23 +90,14 @@ public class LabelledCellProcessor implements FieldProcessor {
 			}
 		}
 		if(setter != null){
-//			if(targetCell.getContents().length() > 0){
-				Utils.setPosition(targetCell.getColumn(), targetCell.getRow(), obj,
-						Utils.toPropertyName(setter.getName()));
-//			} else {
-//				Utils.setPosition(column, row, obj,
-//						Utils.toPropertyName(setter.getName()));
-//			}
-			Utils.invokeSetter(setter, obj, targetCell.getContents());
+			Utils.setPosition(targetCell.getColumn(), targetCell.getRow(), obj,
+					Utils.toPropertyName(setter.getName()));
+			Utils.invokeSetter(setter, obj, targetCell.getContents(), config);
 		}
 
 		if(field != null){
-//			if(targetCell.getContents().length() > 0){
-				Utils.setPosition(targetCell.getColumn(), targetCell.getRow(), obj, field.getName());
-//			} else {
-//				Utils.setPosition(column, row, obj, field.getName());
-//			}
-			Utils.setField(field, obj, targetCell.getContents());
+			Utils.setPosition(targetCell.getColumn(), targetCell.getRow(), obj, field.getName());
+			Utils.setField(field, obj, targetCell.getContents(), config);
 		}
 	}
 

@@ -21,7 +21,7 @@ public @interface HorizontalRecords {
 	String terminateLabel() default "";
 	int headerRow() default -1;
 	int headerColumn() default -1;
-	Class<?> recordClass();
+	Class<?> recordClass() default Object.class;
 	RecordTerminal terminal() default RecordTerminal.Empty;
 	int range() default 1;
 	int bottom() default 1;

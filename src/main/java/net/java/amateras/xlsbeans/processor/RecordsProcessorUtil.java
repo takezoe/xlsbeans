@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import net.java.amateras.xlsbeans.Utils;
+import net.java.amateras.xlsbeans.XLSBeansConfig;
 import net.java.amateras.xlsbeans.XLSBeansException;
 import net.java.amateras.xlsbeans.annotation.Column;
 import net.java.amateras.xlsbeans.xml.AnnotationReader;
@@ -17,10 +18,10 @@ import net.java.amateras.xlsbeans.xml.AnnotationReader;
  */
 public class RecordsProcessorUtil {
 	
-	public static void checkColumns(Class<?> recordClass, 
-			List<HeaderInfo> headers, AnnotationReader reader) throws Exception {
+	public static void checkColumns(Class<?> recordClass, List<HeaderInfo> headers,
+                                    AnnotationReader reader, XLSBeansConfig config) throws Exception {
 		
-		for(Object property: Utils.getColumnProperties(recordClass.newInstance(), null, reader)){
+		for(Object property: Utils.getColumnProperties(recordClass.newInstance(), null, reader, config)){
 			Column column = null;
 			if(property instanceof Method){
 				column = reader.getAnnotation(recordClass, (Method) property, Column.class);
@@ -32,7 +33,7 @@ public class RecordsProcessorUtil {
 				String columnName = column.columnName();
 				boolean find = false;
 				for(HeaderInfo info: headers){
-					if(info.getHeaderLabel().equals(columnName)){
+					if(info.getHeaderLabel().equals(Utils.normalize(columnName, config))){
 						find = true;
 						break;
 					}

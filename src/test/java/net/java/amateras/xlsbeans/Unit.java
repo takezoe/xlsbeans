@@ -34,7 +34,7 @@ public class Unit {
 		return unitUsers;
 	}
 
-	@HorizontalRecords(tableLabel="部門情報", recordClass=UnitUser.class)
+	@HorizontalRecords(tableLabel="部門情報")
 	public void setUnitUsers(List<UnitUser> unitUsers) {
 		this.unitUsers = unitUsers;
 	}

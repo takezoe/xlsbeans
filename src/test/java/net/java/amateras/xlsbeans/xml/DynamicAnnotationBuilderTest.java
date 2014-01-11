@@ -36,7 +36,7 @@ public class DynamicAnnotationBuilderTest extends TestCase {
 		assertEquals("", records.terminateLabel());
 		assertEquals(-1, records.headerRow());
 		assertEquals(-1, records.headerColumn());
-		assertNull(records.recordClass());
+		assertEquals(Object.class, records.recordClass());
 		assertSame(RecordTerminal.Empty, records.terminal());
 		assertEquals(1, records.range());
 		assertEquals(1, records.bottom());

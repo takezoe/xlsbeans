@@ -18,7 +18,7 @@ public class UtilsTest extends TestCase {
 	public void testGetColumnMethod() throws Exception {
 		IDE ide = new IDE();
 		AnnotationReader reader = new AnnotationReader(null);
-		Method[] methods = Utils.getColumnMethods(ide, "IDE", reader);
+		Method[] methods = Utils.getColumnMethods(ide, "IDE", reader, new XLSBeansConfig());
 		assertEquals(1, methods.length);
 		assertEquals("setName", methods[0].getName());
 	}
@@ -28,7 +28,7 @@ public class UtilsTest extends TestCase {
 				UtilsTest.class.getResourceAsStream("example_1.xls"),
 				WorkbookFinder.TYPE_JXL);
 
-		WCell cell = Utils.getCell(w.getSheet(0), "Title", 0);
+		WCell cell = Utils.getCell(w.getSheet(0), "Title", 0, new XLSBeansConfig());
 		assertEquals("Title", cell.getContents());
 	}
 
@@ -37,7 +37,7 @@ public class UtilsTest extends TestCase {
 				UtilsTest.class.getResourceAsStream("example_1.xls"),
 				WorkbookFinder.TYPE_HSSF);
 
-		WCell cell = Utils.getCell(w.getSheet(0), "Title", 0);
+		WCell cell = Utils.getCell(w.getSheet(0), "Title", 0, new XLSBeansConfig());
 		assertEquals("Title", cell.getContents());
 	}
 
@@ -46,7 +46,7 @@ public class UtilsTest extends TestCase {
 				UtilsTest.class.getResourceAsStream("example_1.xlsx"),
 				WorkbookFinder.TYPE_XSSF);
 
-		WCell cell = Utils.getCell(w.getSheet(0), "Title", 0);
+		WCell cell = Utils.getCell(w.getSheet(0), "Title", 0, new XLSBeansConfig());
 		assertEquals("Title", cell.getContents());
 	}
 
@@ -55,7 +55,7 @@ public class UtilsTest extends TestCase {
 				UtilsTest.class.getResourceAsStream("example_1.xls"),
 				WorkbookFinder.TYPE_JXL);
 		try {
-			Utils.getCell(w.getSheet(0), "Title", 1);
+			Utils.getCell(w.getSheet(0), "Title", 1, new XLSBeansConfig());
 			fail();
 		} catch(XLSBeansException ex){
 			assertEquals("Cell 'Title' doesn't exist.", ex.getMessage());
@@ -67,7 +67,7 @@ public class UtilsTest extends TestCase {
 				UtilsTest.class.getResourceAsStream("example_1.xls"),
 				WorkbookFinder.TYPE_HSSF);
 		try {
-			Utils.getCell(w.getSheet(0), "Title", 1);
+			Utils.getCell(w.getSheet(0), "Title", 1, new XLSBeansConfig());
 			fail();
 		} catch(XLSBeansException ex){
 			assertEquals("Cell 'Title' doesn't exist.", ex.getMessage());
@@ -79,7 +79,7 @@ public class UtilsTest extends TestCase {
 				UtilsTest.class.getResourceAsStream("example_1.xlsx"),
 				WorkbookFinder.TYPE_XSSF);
 		try {
-			Utils.getCell(w.getSheet(0), "Title", 1);
+			Utils.getCell(w.getSheet(0), "Title", 1, new XLSBeansConfig());
 			fail();
 		} catch(XLSBeansException ex){
 			assertEquals("Cell 'Title' doesn't exist.", ex.getMessage());
@@ -88,16 +88,14 @@ public class UtilsTest extends TestCase {
 
 	public void testInvokeSetter1() throws Exception {
 		IDE ide = new IDE();
-		Utils.invokeSetter(IDE.class.getMethod("setName", String.class),
-				ide, "Eclipse");
+		Utils.invokeSetter(IDE.class.getMethod("setName", String.class), ide, "Eclipse", new XLSBeansConfig());
 		assertEquals("Eclipse", ide.getName());
 	}
 
 	public void testInvokeSetter2() throws Exception {
 		IDE ide = new IDE();
 		try {
-			Utils.invokeSetter(IDE.class.getMethod("setVersion", String.class),
-					ide, "1.0");
+			Utils.invokeSetter(IDE.class.getMethod("setVersion", String.class), ide, "1.0", new XLSBeansConfig());
 			fail();
 		} catch(NoSuchMethodException ex){
 			assertEquals(
@@ -121,7 +119,7 @@ public class UtilsTest extends TestCase {
 
 		WSheet s = w.getSheet("Users2");
 		try {
-			Utils.getCell(s, "non-existed-label", 0, true);
+			Utils.getCell(s, "non-existed-label", 0, true, new XLSBeansConfig());
 		} catch (XLSBeansException e) {
 			assertEquals("Cell 'non-existed-label' doesn't exist.", e.getMessage());
 			// SUCCEED
@@ -137,7 +135,7 @@ public class UtilsTest extends TestCase {
 
 		WSheet s = w.getSheet("Users2");
 		try {
-			Utils.getCell(s, "non-existed-label", 0, true);
+			Utils.getCell(s, "non-existed-label", 0, true, new XLSBeansConfig());
 		} catch (XLSBeansException e) {
 			assertEquals("Cell 'non-existed-label' doesn't exist.", e.getMessage());
 			// SUCCEED
@@ -153,7 +151,7 @@ public class UtilsTest extends TestCase {
 
 		WSheet s = w.getSheet("Users2");
 		try {
-			Utils.getCell(s, "non-existed-label", 0, true);
+			Utils.getCell(s, "non-existed-label", 0, true, new XLSBeansConfig());
 		} catch (XLSBeansException e) {
 			assertEquals("Cell 'non-existed-label' doesn't exist.", e.getMessage());
 			// SUCCEED
@@ -176,7 +174,7 @@ public class UtilsTest extends TestCase {
 				WorkbookFinder.TYPE_JXL);
 		WSheet s = w.getSheet("Users2");
 		try {
-			Utils.getCell(s, "non-existed-label", 0);
+			Utils.getCell(s, "non-existed-label", 0, new XLSBeansConfig());
 		} catch (XLSBeansException e) {
 			assertEquals("Cell 'non-existed-label' doesn't exist.", e.getMessage());
 			// SUCCEED
@@ -191,7 +189,7 @@ public class UtilsTest extends TestCase {
 				WorkbookFinder.TYPE_HSSF);
 		WSheet s = w.getSheet("Users2");
 		try {
-			Utils.getCell(s, "non-existed-label", 0);
+			Utils.getCell(s, "non-existed-label", 0, new XLSBeansConfig());
 		} catch (XLSBeansException e) {
 			assertEquals("Cell 'non-existed-label' doesn't exist.", e.getMessage());
 			// SUCCEED
@@ -206,7 +204,7 @@ public class UtilsTest extends TestCase {
 				WorkbookFinder.TYPE_XSSF);
 		WSheet s = w.getSheet("Users2");
 		try {
-			Utils.getCell(s, "non-existed-label", 0);
+			Utils.getCell(s, "non-existed-label", 0, new XLSBeansConfig());
 		} catch (XLSBeansException e) {
 			assertEquals("Cell 'non-existed-label' doesn't exist.", e.getMessage());
 			// SUCCEED
@@ -228,7 +226,7 @@ public class UtilsTest extends TestCase {
 				UtilsTest.class.getResourceAsStream("example_1.xls"),
 				WorkbookFinder.TYPE_JXL);
 		WSheet s = w.getSheet("Users2");
-		WCell c = Utils.getCell(s, "non-existed-label", 0, false);
+		WCell c = Utils.getCell(s, "non-existed-label", 0, false, new XLSBeansConfig());
 		assertNull(c);
 		// SUCCEEDED
 	}
@@ -238,7 +236,7 @@ public class UtilsTest extends TestCase {
 				UtilsTest.class.getResourceAsStream("example_1.xls"),
 				WorkbookFinder.TYPE_HSSF);
 		WSheet s = w.getSheet("Users2");
-		WCell c = Utils.getCell(s, "non-existed-label", 0, false);
+		WCell c = Utils.getCell(s, "non-existed-label", 0, false, new XLSBeansConfig());
 		assertNull(c);
 		// SUCCEEDED
 	}
@@ -248,7 +246,7 @@ public class UtilsTest extends TestCase {
 				UtilsTest.class.getResourceAsStream("example_1.xlsx"),
 				WorkbookFinder.TYPE_XSSF);
 		WSheet s = w.getSheet("Users2");
-		WCell c = Utils.getCell(s, "non-existed-label", 0, false);
+		WCell c = Utils.getCell(s, "non-existed-label", 0, false, new XLSBeansConfig());
 		assertNull(c);
 		// SUCCEEDED
 	}
@@ -269,5 +267,17 @@ public class UtilsTest extends TestCase {
 	public void testGetMethodWithAnnotation() {
 		// TODO TestCase
 	}
+
+    public void testNormalize(){
+        String rawText        = "a bc　\t  de\nfg   h  ";
+        String normalizedText = "a bc defg h";
+
+        XLSBeansConfig config = new XLSBeansConfig();
+        config.setNormalizeLabelText(false);
+        assertEquals(rawText, Utils.normalize(rawText, config));
+
+        config.setNormalizeLabelText(true);
+        assertEquals(normalizedText, Utils.normalize(rawText, config));
+    }
 
 }
