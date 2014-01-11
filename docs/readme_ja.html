@@ -190,7 +190,7 @@ public class SheetObject {
 <pre class="prettyprint">
 @Sheet(name="Users")
 public class SheetObject {
-  <strong>@HorizontalRecords(tableLabel="ユーザ一覧", recordClass=Record.class)</strong>
+  <strong>@HorizontalRecords(tableLabel="ユーザ一覧")</strong>
   public void setRecords(List&lt;Record&gt; records){
     ...
   }
@@ -205,8 +205,7 @@ public class SheetObject {
 <pre class="prettyprint">
 @Sheet(name="Users")
 public class SheetObject {
-  @HorizontalRecords(tableLabel="Horizontal Records", recordClass=Record.class,
-            <strong>terminal=RecordTerminal.Border</strong>)
+  @HorizontalRecords(tableLabel="Horizontal Records", <strong>terminal=RecordTerminal.Border</strong>)
   public void setRecords(List&lt;Record&gt; records){
     ...
   }
@@ -221,8 +220,7 @@ public class SheetObject {
 <pre class="prettyprint">
 @Sheet(name="Users")
 public class SheetObject {
-  @HorizontalRecords(tableLabel="Horizontal Records", recordClass=Record.class,
-            <strong>terminateLabel="Terminate"</strong>)
+  @HorizontalRecords(tableLabel="Horizontal Records", <strong>terminateLabel="Terminate"</strong>)
   public void setRecords(List&lt;Record&gt; records){
     ...
   }
@@ -240,8 +238,7 @@ Excelシートの走査を終了します。主に無駄な走査を抑制したい場合にしますが、
 <pre class="prettyprint">
 @Sheet(name="Users")
 public class SheetObject {
-  @HorizontalRecords(tableLabel="Horizontal Records", recordClass=Record.class,
-            terminal=RecordTerminal.Border, <strong>headerLimit=4</strong>)
+  @HorizontalRecords(tableLabel="Horizontal Records", terminal=RecordTerminal.Border, <strong>headerLimit=4</strong>)
   public void setRecords(List&lt;Record&gt; records){
     ...
   }
@@ -265,7 +262,7 @@ public class SheetObject {
 <pre class="prettyprint">
 @Sheet(name="Users")
 public class SheetObject {
-  <strong>@VerticalRecords(tableLabel="Vertical Records", recordClass=Record.class)</strong>
+  <strong>@VerticalRecords(tableLabel="Vertical Records")</strong>
   public void setRecords(List&lt;Record&gt; records){
     ...
   }
@@ -403,7 +400,7 @@ public class Unit {
   public void setUnitName(String unitName) {
     ...
   }
-  @HorizontalRecords(tableLabel="部門情報", recordClass=UnitUser.class)
+  @HorizontalRecords(tableLabel="部門情報")
   public void setUnitUsers(List&lt;UnitUser&gt; unitUsers) {
     this.unitUsers = unitUsers;
   }

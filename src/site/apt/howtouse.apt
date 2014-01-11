@@ -139,7 +139,7 @@ public class SheetObject {
 --------
 @Sheet(name="Users")
 public class SheetObject {
-  @HorizontalRecords(tableLabel="ユーザ一覧", recordClass=Record.class)
+  @HorizontalRecords(tableLabel="ユーザ一覧")
   public void setRecords(List<Record> records){
     ...
   }
@@ -153,8 +153,7 @@ public class SheetObject {
 --------
 @Sheet(name="Users")
 public class SheetObject {
-  @HorizontalRecords(tableLabel="Horizontal Records", recordClass=Record.class,
-            terminal=RecordTerminal.Border)
+  @HorizontalRecords(tableLabel="Horizontal Records", terminal=RecordTerminal.Border)
   public void setRecords(List<Record> records){
     ...
   }
@@ -167,8 +166,7 @@ public class SheetObject {
 --------
 @Sheet(name="Users")
 public class SheetObject {
-  @HorizontalRecords(tableLabel="Horizontal Records", recordClass=Record.class,
-            terminateLabel="Terminate")
+  @HorizontalRecords(tableLabel="Horizontal Records", terminateLabel="Terminate")
   public void setRecords(List<Record> records){
     ...
   }
@@ -184,8 +182,7 @@ public class SheetObject {
 --------
 @Sheet(name="Users")
 public class SheetObject {
-  @HorizontalRecords(tableLabel="Horizontal Records", recordClass=Record.class,
-            terminal=RecordTerminal.Border, headerLimit=4)
+  @HorizontalRecords(tableLabel="Horizontal Records", terminal=RecordTerminal.Border, headerLimit=4)
   public void setRecords(List<Record> records){
     ...
   }
@@ -202,7 +199,7 @@ public class SheetObject {
 --------
 @Sheet(name="Users")
 public class SheetObject {
-  @VerticalRecords(tableLabel="Vertical Records", recordClass=Record.class)
+  @VerticalRecords(tableLabel="Vertical Records")
   public void setRecords(List<Record> records){
     ...
   }
@@ -316,7 +313,7 @@ public class Unit {
   public void setUnitName(String unitName) {
     ...
   }
-  @HorizontalRecords(tableLabel="部門情報", recordClass=UnitUser.class)
+  @HorizontalRecords(tableLabel="部門情報")
   public void setUnitUsers(List&lt;UnitUser&gt; unitUsers) {
     this.unitUsers = unitUsers;
   }
