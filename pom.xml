@@ -4,7 +4,7 @@
   <groupId>jp.sf.amateras.xlsbeans</groupId>
   <artifactId>xlsbeans</artifactId>
   <packaging>jar</packaging>
-  <version>1.2.3</version>
+  <version>1.2.4</version>
   <name>XLSBeans</name>
   <url>http://maven.apache.org</url>
   <description>

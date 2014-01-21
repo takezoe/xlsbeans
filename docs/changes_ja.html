@@ -9,6 +9,21 @@
 <body onload="prettyPrint()">
 <h1>XLSBeans変更履歴</h1>
 
+<h2>1.2.4 - 2014/01/22</h2>
+<ul>
+  <li>セルや列を正規表現でマッピングするためのregexLabelTextオプションをXMLBeansConfigに追加。</li>
+</ul>
+
+<h2>1.2.3 - 2014/01/12</h2>
+<ul>
+  <li>XLSBeansの動作をカスタマイズするためのXLSBeansConfigクラスを導入。</li>
+  <li>TypeConverterでプロパティの型に応じた型変換をカスタマイズできるようになった。</li>
+  <li>セルの値を文字列にマッピングする際にトリムするかどうかを指定できるようになった。</li>
+  <li>@HorizontalRecordsや@VerticalRecordsアノテーションのrecordClass属性はオプションになった。
+      recordClass属性を省略した場合、Listの場合はジェネリクスの型パラメータから、配列の場合は配列要素の型を使用します。</li>
+  <li>見出しを指定してのマッピングで、空白などを無視するかどうかを指定できるようになった。</li>
+</ul>
+
 <h2>1.2.2 - 2013/12/31</h2>
 <ul>
   <li>プロパティ名+Positionにセットされるセル位置を修正。</li>
