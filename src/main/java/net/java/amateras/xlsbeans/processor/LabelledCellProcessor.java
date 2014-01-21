@@ -71,7 +71,7 @@ public class LabelledCellProcessor implements FieldProcessor {
 			range = 1;
 		}
 
-		for(int i=cell.skip(); i<range; i++){
+		for(int i = cell.skip(); i < range; i++){
 			switch(cell.type()){
 			case Left:
 				targetCell = wSheet.getCell(column - (1 * (i + 1)), row);
@@ -90,8 +90,7 @@ public class LabelledCellProcessor implements FieldProcessor {
 			}
 		}
 		if(setter != null){
-			Utils.setPosition(targetCell.getColumn(), targetCell.getRow(), obj,
-					Utils.toPropertyName(setter.getName()));
+			Utils.setPosition(targetCell.getColumn(), targetCell.getRow(), obj, Utils.toPropertyName(setter.getName()));
 			Utils.invokeSetter(setter, obj, targetCell.getContents(), config);
 		}
 

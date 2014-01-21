@@ -153,7 +153,7 @@ public class VerticalRecordsProcessor implements FieldProcessor {
 						}
 					}
 				}
-				headers.add(new HeaderInfo(Utils.normalize(cell.getContents(), config), rangeCount - 1));
+				headers.add(new HeaderInfo(cell.getContents(), rangeCount - 1));
 				hRow = hRow + rangeCount;
 				rangeCount = 1;
 			} catch(ArrayIndexOutOfBoundsException ex){
@@ -199,10 +199,10 @@ public class VerticalRecordsProcessor implements FieldProcessor {
 					}
 				}
 				if(!records.terminateLabel().equals("")){
-					if(Utils.normalize(cell.getContents(), config).equals(Utils.normalize(records.terminateLabel(), config))){
-						emptyFlag = true;
-						break;
-					}
+                    if(Utils.matches(cell.getContents(), records.terminateLabel(), config)){
+                        emptyFlag = true;
+                        break;
+                    }
 				}
 
 				List<Object> properties = Utils.getColumnProperties(record, headerInfo.getHeaderLabel(), reader, config);
@@ -226,7 +226,7 @@ public class VerticalRecordsProcessor implements FieldProcessor {
 							for(int k = hColumn; k > initColumn; k--){
 								WCell tmpCell = wSheet.getCell(k, hRow);
 								WCellFormat tmpCellFormat = tmpCell.getCellFormat();
-								if(tmpCellFormat!=null && !tmpCellFormat.getBorder(WBorder.LEFT).equals(WBorderLineStyle.NONE)){
+								if(tmpCellFormat != null && !tmpCellFormat.getBorder(WBorder.LEFT).equals(WBorderLineStyle.NONE)){
 									break;
 								}
 								if(!tmpCell.getContents().equals("")){
@@ -282,7 +282,7 @@ public class VerticalRecordsProcessor implements FieldProcessor {
 			boolean flag = false;
 			Map<String, String> map = new LinkedHashMap<String, String>();
 			for(HeaderInfo headerInfo : headerInfos){
-				if(headerInfo.getHeaderLabel().equals(Utils.normalize(ann.previousColumnName(), config))){
+                if(Utils.matches(headerInfo.getHeaderLabel(), ann.previousColumnName(), config)){
 					flag = true;
 					begin++;
 					continue;

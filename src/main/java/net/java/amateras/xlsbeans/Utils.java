@@ -82,7 +82,7 @@ public class Utils {
 						String columnName = column.columnName();
 						if(name == null){
 							result.add(methods[i]);
-						} else if(Utils.normalize(columnName, config).equals(name)){
+						} else if(Utils.matches(columnName, name, config)){
 							result.add(methods[i]);
 						}
 					}
@@ -103,7 +103,7 @@ public class Utils {
 					String columnName = column.columnName();
 					if(name == null){
 						result.add(fields[i]);
-					} else if(Utils.normalize(columnName, config).equals(name)){
+					} else if(Utils.matches(columnName, name, config)){
 						result.add(fields[i]);
 					}
 				}
@@ -146,9 +146,9 @@ public class Utils {
 		for(int i = 0;i < rows; i++){
 			WCell[] columns = wSheet.getColumn(i);
 			for(int j = from; j < columns.length; j++){
-				if(normalize(columns[j].getContents(), config).equals(normalize(label, config))){
-					return columns[j];
-				}
+                if(Utils.matches(columns[j].getContents(), label, config)){
+                    return columns[j];
+                }
 			}
 		}
 		if (throwableWhenNotFound) {
@@ -156,48 +156,6 @@ public class Utils {
 		}
 		return null;
 	}
-
-//	private static Object convertValue(Class<?> type, String value, XLSBeansConfig config){
-//		if(type.equals(String.class)){
-//			return value;
-//		} else if(type.equals(Integer.TYPE) || type.equals(Integer.class)){
-//			if(value.length() == 0){
-//				value = "0";
-//			}
-//			return new Integer(value);
-//		} else if(type.equals(Double.TYPE) || type.equals(Double.class)){
-//			if(value.length() == 0){
-//				value = "0";
-//			}
-//			return new Double(value);
-//		} else if(type.equals(Short.TYPE) || type.equals(Short.class)){
-//			if(value.length() == 0){
-//				value = "0";
-//			}
-//			return new Short(value);
-//		} else if(type.equals(Long.TYPE) || type.equals(Long.class)){
-//			if(value.length() == 0){
-//				value = "0";
-//			}
-//			return new Long(value);
-//		} else if(type.equals(Float.TYPE) || type.equals(Float.class)){
-//			if(value.length() == 0){
-//				value = "0";
-//			}
-//			return new Float(value);
-//		} else if(type.equals(Boolean.TYPE) || type.equals(Boolean.class)){
-//			if(value.length() == 0){
-//				value = "false";
-//			}
-//			return new Boolean(value);
-//		} else if(type.equals(Character.TYPE) || type.equals(Character.class)){
-//			if(value.length() == 0){
-//				value = " ";
-//			}
-//			return new Character(value.charAt(0));
-//		}
-//		return null;
-//	}
 
 	/**
 	 * Invokes the setter method using reflection.
@@ -209,10 +167,10 @@ public class Utils {
 	 */
 	public static void invokeSetter(Method setter, Object obj, String value, XLSBeansConfig config) throws Exception {
 		Class<?>[] types = setter.getParameterTypes();
-		if(types.length!=1){
+		if(types.length != 1){
 			return;
 		}
-		Object valueObject =config.getConverter(types[0]).convert(value, config);
+		Object valueObject = config.getConverter(types[0]).convert(value, config);
 		if(valueObject != null){
 			setter.invoke(obj, new Object[]{ valueObject });
 		}
@@ -267,8 +225,7 @@ public class Utils {
      * @return Target JExcel Api cell object.
      * @throws XLSBeansException This occures when the cell is not found.
      */
-    public static WCell getCell(WSheet wSheet, String label, WCell after,
-            boolean includeAfter, XLSBeansConfig config) throws XLSBeansException {
+    public static WCell getCell(WSheet wSheet, String label, WCell after, boolean includeAfter, XLSBeansConfig config) throws XLSBeansException {
         return getCell(wSheet, label, after, includeAfter, true, config);
     }
 
@@ -321,8 +278,7 @@ public class Utils {
         }
 	}
 
-	public static List<Object> getPropertiesWithAnnotation(Object tableObj,
-			AnnotationReader reader, Class<?> clazz) throws Exception {
+	public static List<Object> getPropertiesWithAnnotation(Object tableObj, AnnotationReader reader, Class<?> clazz) throws Exception {
 
 		List<Object> properties = new ArrayList<Object>();
 
@@ -345,18 +301,15 @@ public class Utils {
 	 * @return setter methods in argument object with annotation.
 	 * @throws Exception unexpected exception.
 	 */
-	protected static Method[] getMethodsWithAnnotation(Object tableObj,
-			AnnotationReader reader, Class<?> clazz) throws Exception {
+	protected static Method[] getMethodsWithAnnotation(Object tableObj, AnnotationReader reader, Class<?> clazz) throws Exception {
 		List<Method> result = new ArrayList<Method>();
 		Method[] methods = tableObj.getClass().getMethods();
 
 		for (Method method : methods) {
 			// setter
-			if (method.getName().startsWith("set")
-					&& method.getParameterTypes().length == 1) {
+			if (method.getName().startsWith("set") && method.getParameterTypes().length == 1) {
 				// find annotation
-				Annotation[] ans = reader.getAnnotations(tableObj.getClass(),
-						method);
+				Annotation[] ans = reader.getAnnotations(tableObj.getClass(), method);
 				for (Annotation an : ans) {
 					if (an.annotationType().isAssignableFrom(clazz)) {
 						result.add(method);
@@ -377,8 +330,7 @@ public class Utils {
 	 * @return public fields in argument object with annotation.
 	 * @throws Exception unexpected exception.
 	 */
-	protected static Field[] getFieldsWithAnnotation(Object tableObj,
-			AnnotationReader reader, Class<?> clazz) throws Exception {
+	protected static Field[] getFieldsWithAnnotation(Object tableObj, AnnotationReader reader, Class<?> clazz) throws Exception {
 		List<Field> result = new ArrayList<Field>();
 		Field[] fields = tableObj.getClass().getFields();
 
@@ -399,15 +351,13 @@ public class Utils {
 		String positionMethodName = toSetterName(propertyName) + "Position";
 
 		try {
-			Method positionMethod = obj.getClass().getMethod(
-					positionMethodName, Integer.TYPE, Integer.TYPE);
+			Method positionMethod = obj.getClass().getMethod(positionMethodName, Integer.TYPE, Integer.TYPE);
 			positionMethod.invoke(obj, x, y);
 			return;
 		} catch(NoSuchMethodException ex){
 		}
 		try {
-			Method positionMethod = obj.getClass().getMethod(
-					positionMethodName, Point.class);
+			Method positionMethod = obj.getClass().getMethod(positionMethodName, Point.class);
 			positionMethod.invoke(obj, new Point(x, y));
 			return;
 		} catch(NoSuchMethodException ex){
@@ -430,7 +380,15 @@ public class Utils {
 		return setterName.substring(0, 1).toLowerCase() + setterName.substring(1);
 	}
 
-    public static String normalize(String text, XLSBeansConfig config){
+    public static boolean matches(String text1, String text2, XLSBeansConfig config){
+        if(config.isRegexLabelText()){
+            return normalize(text1, config).matches(text2);
+        } else {
+            return normalize(text1, config).equals(normalize(text2, config));
+        }
+    }
+
+    private static String normalize(String text, XLSBeansConfig config){
         if(text != null && config.isNormalizeLabelText()){
             return text.trim().replaceAll("[\n\r]", "").replaceAll("[\t 　]+", " ");
         }

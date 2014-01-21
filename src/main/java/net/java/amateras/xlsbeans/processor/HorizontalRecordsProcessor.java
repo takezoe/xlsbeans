@@ -149,7 +149,7 @@ public class HorizontalRecordsProcessor implements FieldProcessor {
 				if(cell.getContents().equals("")){
 					break;
 				}
-				headers.add(new HeaderInfo(Utils.normalize(cell.getContents(), config), rangeCount - 1));
+				headers.add(new HeaderInfo(cell.getContents(), rangeCount - 1));
 				hColumn = hColumn + rangeCount;
 				rangeCount = 1;
 			} catch(ArrayIndexOutOfBoundsException ex){
@@ -195,10 +195,10 @@ public class HorizontalRecordsProcessor implements FieldProcessor {
 					}
 				}
 				if(!records.terminateLabel().equals("")){
-					if(Utils.normalize(wCell.getContents(), config).equals(Utils.normalize(records.terminateLabel(), config))){
-						emptyFlag = true;
-						break;
-					}
+                    if(Utils.matches(wCell.getContents(), records.terminateLabel(), config)){
+                        emptyFlag = true;
+                        break;
+                    }
 				}
 
 				List<Object> properties = Utils.getColumnProperties(record, headerInfo.getHeaderLabel(), reader, config);
@@ -218,11 +218,11 @@ public class HorizontalRecordsProcessor implements FieldProcessor {
 					}
 					if(valueCell.getContents().equals("")){
 						WCellFormat valueCellFormat = valueCell.getCellFormat();
-						if(column.merged() && (valueCellFormat==null || valueCellFormat.getBorder(WBorder.TOP).equals(WBorderLineStyle.NONE))){
+						if(column.merged() && (valueCellFormat == null || valueCellFormat.getBorder(WBorder.TOP).equals(WBorderLineStyle.NONE))){
 							for(int k = hRow - 1; k > initRow; k--){
 								WCell tmpCell = wSheet.getCell(hColumn, k);
 								WCellFormat tmpCellFormat = tmpCell.getCellFormat();
-								if(tmpCellFormat!=null && !tmpCellFormat.getBorder(WBorder.BOTTOM).equals(WBorderLineStyle.NONE)){
+								if(tmpCellFormat != null && !tmpCellFormat.getBorder(WBorder.BOTTOM).equals(WBorderLineStyle.NONE)){
 									break;
 								}
 								if(!tmpCell.getContents().equals("")){
@@ -253,7 +253,7 @@ public class HorizontalRecordsProcessor implements FieldProcessor {
 			result.add(record);
 			for(Method method : record.getClass().getMethods()){
 				PostProcess ann = reader.getAnnotation(record.getClass(), method, PostProcess.class);
-				if(ann!=null){
+				if(ann != null){
 					needPostProcess.add(new NeedPostProcess(record, method));
 				}
 			}
@@ -279,11 +279,11 @@ public class HorizontalRecordsProcessor implements FieldProcessor {
 			boolean flag = false;
 			Map<String, String> map = new LinkedHashMap<String, String>();
 			for(HeaderInfo headerInfo : headerInfos){
-				if(headerInfo.getHeaderLabel().equals(Utils.normalize(ann.previousColumnName(), config))){
-					flag = true;
-					begin++;
-					continue;
-				}
+                if(Utils.matches(headerInfo.getHeaderLabel(), ann.previousColumnName(), config)){
+                    flag = true;
+                    begin++;
+                    continue;
+                }
 				if(flag){
 					WCell cell = wSheet.getCell(begin + headerInfo.getHeaderRange(), row);
 					map.put(headerInfo.getHeaderLabel(), cell.getContents());

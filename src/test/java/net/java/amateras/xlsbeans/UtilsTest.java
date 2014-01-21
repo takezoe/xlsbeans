@@ -268,16 +268,24 @@ public class UtilsTest extends TestCase {
 		// TODO TestCase
 	}
 
-    public void testNormalize(){
+    public void testMatches_normalize(){
         String rawText        = "a bc　\t  de\nfg   h  ";
         String normalizedText = "a bc defg h";
 
         XLSBeansConfig config = new XLSBeansConfig();
         config.setNormalizeLabelText(false);
-        assertEquals(rawText, Utils.normalize(rawText, config));
+        assertFalse(Utils.matches(rawText, normalizedText, config));
 
         config.setNormalizeLabelText(true);
-        assertEquals(normalizedText, Utils.normalize(rawText, config));
+        assertTrue(Utils.matches(rawText, normalizedText, config));
     }
 
+    public void testMatches_regex(){
+        XLSBeansConfig config = new XLSBeansConfig();
+
+        config.setNormalizeLabelText(false);
+        config.setRegexLabelText(true);
+        assertTrue(Utils.matches("test_data", "test.*", config));
+        assertFalse(Utils.matches("test_data", "nottest.*", config));
+    }
 }

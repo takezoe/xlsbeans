@@ -13,6 +13,8 @@ public class XLSBeansConfig {
 
     private boolean trimText = false;
 
+    private boolean regexLabelText = false;
+
     private Map<Class<?>, TypeConverter> converters = new HashMap<Class<?>, TypeConverter>();
 
     public XLSBeansConfig(){
@@ -53,6 +55,14 @@ public class XLSBeansConfig {
 
     public void setTrimText(boolean trimText) {
         this.trimText = trimText;
+    }
+
+    public boolean isRegexLabelText() {
+        return regexLabelText;
+    }
+
+    public void setRegexLabelText(boolean regexLabelText) {
+        this.regexLabelText = regexLabelText;
     }
 
     public <T> void addTypeConverter(Class<T> clazz, TypeConverter<T> converter){

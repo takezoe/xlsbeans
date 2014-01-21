@@ -33,10 +33,10 @@ public class RecordsProcessorUtil {
 				String columnName = column.columnName();
 				boolean find = false;
 				for(HeaderInfo info: headers){
-					if(info.getHeaderLabel().equals(Utils.normalize(columnName, config))){
-						find = true;
-						break;
-					}
+                    if(Utils.matches(info.getHeaderLabel(), columnName, config)){
+                        find = true;
+                        break;
+                    }
 				}
 				if(!find){
 					throw new XLSBeansException("Column '" + columnName + "' doesn't exist.");
