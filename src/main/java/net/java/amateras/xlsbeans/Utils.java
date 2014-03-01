@@ -381,8 +381,8 @@ public class Utils {
 	}
 
     public static boolean matches(String text1, String text2, XLSBeansConfig config){
-        if(config.isRegexLabelText()){
-            return normalize(text1, config).matches(text2);
+        if(config.isRegexLabelText() && text2.startsWith("/") && text2.endsWith("/")){
+            return normalize(text1, config).matches(text2.substring(1, text2.length() - 1));
         } else {
             return normalize(text1, config).equals(normalize(text2, config));
         }

@@ -285,7 +285,7 @@ public class UtilsTest extends TestCase {
 
         config.setNormalizeLabelText(false);
         config.setRegexLabelText(true);
-        assertTrue(Utils.matches("test_data", "test.*", config));
-        assertFalse(Utils.matches("test_data", "nottest.*", config));
+        assertTrue(Utils.matches("test_data", "/test.*/", config));
+        assertFalse(Utils.matches("test_data", "/nottest.*/", config));
     }
 }
