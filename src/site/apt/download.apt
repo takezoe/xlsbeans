@@ -7,14 +7,6 @@
 
 ダウンロード
 
- XLSBeansのリリース版は以下のURLからダウンロードすることができます。
-
- * {{http://sourceforge.jp/projects/amateras/releases/?package_id=5761}}
-
- []
-
-* {Mavenを使用する場合}
-
  Mavenを使用する場合はpom.xmlに以下の記述を追加してください。
 
 --------
@@ -30,7 +22,7 @@
   <dependency>
     <groupId>jp.sf.amateras.xlsbeans</groupId>
     <artifactId>xlsbeans</artifactId>
-    <version>1.2.4</version>
+    <version>1.2.5</version>
   </dependency>
 </dependencies>
 --------
