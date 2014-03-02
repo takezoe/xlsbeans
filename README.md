@@ -21,7 +21,7 @@ To use XLSBeans, add the following dependency to your pom.xml:
   <dependency>
     <groupId>jp.sf.amateras.xlsbeans</groupId>
     <artifactId>xlsbeans</artifactId>
-    <version>1.2.4</version>
+    <version>1.2.5</version>
   </dependency>
 </dependencies>
 ```
@@ -70,3 +70,7 @@ You can get the mapped POJO using ```XLSBeans#load()``` like following:
 UserList userList = (UserList)new XLSBeans.load(
   new FileInputStream("example.xls"), UserList.class);
 ```
+
+## Documentation
+
+See more details in http://amateras.sourceforge.jp/site/xlsbeans/howtouse.html

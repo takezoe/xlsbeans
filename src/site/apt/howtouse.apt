@@ -9,9 +9,42 @@ XLSBeans
 
 %{toc|section=1|fromDepth=1|toDepth=3}
 
-* {基本的な使い方}
+** {読み込み方}
 
- XLSBeansはアノテーションを付与してJavaBeansとExcelをマッピングするライブラリです。以下のアノテーションが利用可能です。
+ XLSBeansはアノテーションを付与してJavaBeansとExcelをマッピングするライブラリです。
+ アノテーションを付与したJavaBeanを作成したうえで以下のようにして読み込みを行います。
+
+--------
+SheetObject sheet = new XLSBeans().load(
+    new FileInputStream("example.xls"), SheetObject.class);
+--------
+
+ なお、@Cell, @LabelledCell, @Columnアノテーションでマッピングするプロパティに関しては、
+ 現時点ではString型、プリミティブ型、プリミティブ型のラッパー型のいずれかである必要があります。
+ より具体的な使用例はXLSBeansのディストリビューションに同梱されているテストケースのソースコードをご覧ください。
+
+ XLSBeansはデフォルトではJava Excel APIを使用してExcelファイルの読み込みを行いますが、
+ load()もしくはloadMultiple()メソッドの引数にオプションを指定することで読み込みにApache POIを使用することができます。
+
+--------
+// Excel2007形式のファイルを読み込む場合
+SheetObject sheet = new XLSBeans().load(
+    new FileInputStream("example.xls"), SheetObject.class, WorkbookFinder.TYPE_XSSF);
+--------
+
+ オプションとして指定可能な値は以下の通りです。
+
+ * WorkbookFinder.TYPE_JXL - Java Excel APIを使用してExcel2003形式（xls）のファイルを読み込み
+
+ * WorkbookFinder.TYPE_HSSF - Apache POIを使用してExcel2003形式（xls）のファイルを読み込み
+
+ * WorkbookFinder.TYPE_XSSF - Apache POIを使用してExcel2007形式（xlsx）のファイルを読み込み
+
+ []
+
+* {アノテーション}
+
+ XLSBeansでは以下のアノテーションが利用可能です。
 
  [Note] XLSBeans 1.1.0以降ではアクセサメソッドの代わりにpublicフィールドにアノテーションを付与することもできます。
         以下のリファレンスでsetterメソッドに付与することが可能なアノテーションはpublicフィールドにも付与することができます。
@@ -335,37 +368,38 @@ public class UnitUser {
 }
 --------
 
-** {読み込み方}
+** {読み込み動作のカスタマイズ}
 
- 以下のようにして読み込みを行います。
-
---------
-SheetObject sheet = new XLSBeans().load(
-    new FileInputStream("example.xls"), SheetObject.class);
---------
-
- なお、@Cell, @LabelledCell, @Columnアノテーションでマッピングするプロパティに関しては、
- 現時点ではString型、プリミティブ型、プリミティブ型のラッパー型のいずれかである必要があります。
- より具体的な使用例はXLSBeansのディストリビューションに同梱されているテストケースのソースコードをご覧ください。
-
- XLSBeansはデフォルトではJava Excel APIを使用してExcelファイルの読み込みを行いますが、
- load()もしくはloadMultiple()メソッドの引数にオプションを指定することで読み込みにApache POIを使用することができます。
+ 1.2.3以降では読み込み時の動作をカスタマイズするためのXLSBeansConfigクラスが導入されています。
 
 --------
-// Excel2007形式のファイルを読み込む場合
-SheetObject sheet = new XLSBeans().load(
+XLSBeans xlsBeans = new XLSBeans();
+
+// 読み込んだテキストをトリムするように設定
+XMLBeansConfig config = new XLSBeansConfig();
+config.setTrimText(true);
+
+xlsBeans.setConfig(config);
+
+SheetObject sheet = new xlsBeans.load(
     new FileInputStream("example.xls"), SheetObject.class, WorkbookFinder.TYPE_XSSF);
 --------
 
- オプションとして指定可能な値は以下の通りです。
+ XLSBeansConfigでは以下の設定を行うことができます。
 
- * WorkbookFinder.TYPE_JXL - Java Excel APIを使用してExcel2003形式（xls）のファイルを読み込み
-
- * WorkbookFinder.TYPE_HSSF - Apache POIを使用してExcel2003形式（xls）のファイルを読み込み
-
- * WorkbookFinder.TYPE_XSSF - Apache POIを使用してExcel2007形式（xlsx）のファイルを読み込み
-
- []
+*--------------------+----------------------------------+-----------------------------------------------------------------------------------------------+
+ プロパティ名        | 型                               | 説明
+*--------------------+----------------------------------+-----------------------------------------------------------------------------------------------+
+ ignoreSheetNotFound | boolean（デフォルトはfalse）     | シートが見つからない場合にエラーにしない。
+*--------------------+----------------------------------+-----------------------------------------------------------------------------------------------+
+ normalizeLabelText  | boolean（デフォルトはfalse）     | ラベルの文字列の空白等を正規化してマッピングする。
+*--------------------+----------------------------------+-----------------------------------------------------------------------------------------------+
+ trimText            | boolean（デフォルトはfalse）     | マッピングした文字列をトリムする。
+*--------------------+----------------------------------+-----------------------------------------------------------------------------------------------+
+ regexLabelText      | boolean（デフォルトはfalse）     | マッピングするラベルに/正規表現/と記述しておくと正規表現でマッピングできる。
+*--------------------+----------------------------------+-----------------------------------------------------------------------------------------------+
+ converters          | Map\<Class\<?\>, TypeConverter\> | マッピングする値をプロパティの型に応じて変換するコンバータを追加する。
+*--------------------+----------------------------------+-----------------------------------------------------------------------------------------------+
 
 * {シート上の位置情報の取得}
 
@@ -391,7 +425,12 @@ public void setNamePosition(int x, int y){
 
  []
 
- [Note] publicフィールドを使用する場合は<code>java.awt.Point</code>型のフィールドを用意してください。
+ [Note] publicフィールドを使用する場合はjava.awt.Point型のフィールドを用意してください。
+
+ []
+
+ なお、1.2.5からはプロパティ毎に位置を設定するためのメソッドやフィールドを定義しなくても、
+ Map\<String, Point\> positionsというフィールドを定義しておくとプロパティ名をキーにセルの位置がセットされるようになっています。
 
 * {XMLファイルによるマッピング}
 
