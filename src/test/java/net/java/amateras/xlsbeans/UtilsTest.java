@@ -2,7 +2,6 @@ package net.java.amateras.xlsbeans;
 
 import java.awt.*;
 import java.lang.reflect.Method;
-import java.util.HashMap;
 import java.util.Map;
 
 import junit.framework.TestCase;
@@ -311,7 +310,7 @@ public class UtilsTest extends TestCase {
     }
 
     public static class PositionTest1 {
-        public HashMap<String, Point> positions;
+        public Map<String, Point> positions;
     }
 
     public static class PositionTest2 {
