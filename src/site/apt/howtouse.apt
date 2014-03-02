@@ -9,7 +9,7 @@ XLSBeans
 
 %{toc|section=1|fromDepth=1|toDepth=3}
 
-** {読み込み方}
+* {読み込み方}
 
  XLSBeansはアノテーションを付与してJavaBeansとExcelをマッピングするライブラリです。
  アノテーションを付与したJavaBeanを作成したうえで以下のようにして読み込みを行います。
@@ -368,7 +368,7 @@ public class UnitUser {
 }
 --------
 
-** {読み込み動作のカスタマイズ}
+* {読み込み動作のカスタマイズ}
 
  1.2.3以降では読み込み時の動作をカスタマイズするためのXLSBeansConfigクラスが導入されています。
 
