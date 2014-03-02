@@ -1,6 +1,9 @@
 package net.java.amateras.xlsbeans;
 
+import java.awt.*;
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 
 import junit.framework.TestCase;
 import net.java.amateras.xlsbeans.xml.AnnotationReader;
@@ -287,5 +290,39 @@ public class UtilsTest extends TestCase {
         config.setRegexLabelText(true);
         assertTrue(Utils.matches("test_data", "/test.*/", config));
         assertFalse(Utils.matches("test_data", "/nottest.*/", config));
+    }
+
+    public void testSetPosition_Map() throws Exception {
+        PositionTest1 obj = new PositionTest1();
+        Utils.setPosition(1, 2, obj, "hoge");
+        assertEquals(obj.positions.size(), 1);
+        assertEquals(obj.positions.get("hoge").getX(), 1.0);
+        assertEquals(obj.positions.get("hoge").getY(), 2.0);
+    }
+
+    public void testSetPosition_individual() throws Exception {
+        PositionTest2 obj = new PositionTest2();
+        Utils.setPosition(1, 2, obj, "hoge");
+        Utils.setPosition(3, 4, obj, "fuga");
+        assertEquals(obj.hogePosition.getX(), 1.0);
+        assertEquals(obj.hogePosition.getY(), 2.0);
+        assertEquals(obj.x, 3);
+        assertEquals(obj.y, 4);
+    }
+
+    public static class PositionTest1 {
+        public HashMap<String, Point> positions;
+    }
+
+    public static class PositionTest2 {
+        public Point hogePosition;
+
+        public int x;
+        public int y;
+
+        public void setFugaPosition(int x, int y){
+            this.x = x;
+            this.y = y;
+        }
     }
 }

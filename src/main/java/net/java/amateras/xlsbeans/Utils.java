@@ -5,7 +5,9 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.java.amateras.xlsbeans.annotation.Column;
 import net.java.amateras.xlsbeans.annotation.MapColumns;
@@ -348,8 +350,22 @@ public class Utils {
 	}
 
 	public static void setPosition(int x, int y, Object obj, String propertyName) throws Exception {
-		String positionMethodName = toSetterName(propertyName) + "Position";
+		try {
+			Field field = obj.getClass().getField("positions");
+            if(field.getType().isAssignableFrom(Map.class)){
+                field.setAccessible(true);
+                Object fieldValue = field.get(obj);
+                if(fieldValue == null){
+                    fieldValue = new HashMap<String, Point>();
+                    field.set(obj, fieldValue);
+                }
+                ((Map)fieldValue).put(propertyName, new Point(x, y));
+                return;
+            }
+		} catch(NoSuchFieldException ex){
+		}
 
+		String positionMethodName = toSetterName(propertyName) + "Position";
 		try {
 			Method positionMethod = obj.getClass().getMethod(positionMethodName, Integer.TYPE, Integer.TYPE);
 			positionMethod.invoke(obj, x, y);
