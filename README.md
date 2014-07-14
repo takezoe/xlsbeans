@@ -67,7 +67,7 @@ public class User {
 You can get the mapped POJO using ```XLSBeans#load()``` like following:
 
 ```java
-UserList userList = (UserList)new XLSBeans.load(
+UserList userList = (UserList)new XLSBeans().load(
   new FileInputStream("example.xls"), UserList.class);
 ```
 
