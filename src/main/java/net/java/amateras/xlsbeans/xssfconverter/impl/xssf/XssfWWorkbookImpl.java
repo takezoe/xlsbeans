@@ -1,5 +1,6 @@
 package net.java.amateras.xlsbeans.xssfconverter.impl.xssf;
 
+import net.java.amateras.xlsbeans.xssfconverter.NullWSheetImpl;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
@@ -22,12 +23,12 @@ public class XssfWWorkbookImpl implements WWorkbook {
 
 	public WSheet getSheet(int i) {
 		Sheet sheet = workbook.getSheetAt(i);
-		return new XssfWSheetImpl(sheet);
+		return (sheet != null) ? new XssfWSheetImpl(sheet) : NullWSheetImpl.INSTANCE;
 	}
 
 	public WSheet getSheet(String name) {
 		Sheet sheet = workbook.getSheet(name);
-		return new XssfWSheetImpl(sheet);
+		return (sheet != null) ? new XssfWSheetImpl(sheet) : NullWSheetImpl.INSTANCE;
 	}
 
 	public WSheet[] getSheets() {

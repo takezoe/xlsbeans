@@ -17,6 +17,7 @@ import net.java.amateras.xlsbeans.processor.FieldProcessorFactory;
 import net.java.amateras.xlsbeans.xml.AnnotationReader;
 import net.java.amateras.xlsbeans.xml.XMLInfo;
 import net.java.amateras.xlsbeans.xml.XMLLoader;
+import net.java.amateras.xlsbeans.xssfconverter.NullWSheetImpl;
 import net.java.amateras.xlsbeans.xssfconverter.WSheet;
 import net.java.amateras.xlsbeans.xssfconverter.WWorkbook;
 import net.java.amateras.xlsbeans.xssfconverter.WorkbookFinder;
@@ -122,7 +123,7 @@ public class XLSBeans {
 //		jxl.Sheet jxlSheet = null;
 		if(sheet.name().length() > 0){
 			WSheet wSheet = w.getSheet(sheet.name());
-			if(wSheet == null){
+			if(wSheet instanceof NullWSheetImpl){
 				throw new SheetNotFoundException(sheet.name());
 			}
 			return new WSheet[]{wSheet};

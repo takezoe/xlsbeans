@@ -2,6 +2,7 @@ package net.java.amateras.xlsbeans.xssfconverter.impl.jxl;
 
 import jxl.Sheet;
 import jxl.Workbook;
+import net.java.amateras.xlsbeans.xssfconverter.NullWSheetImpl;
 import net.java.amateras.xlsbeans.xssfconverter.WSheet;
 import net.java.amateras.xlsbeans.xssfconverter.WWorkbook;
 
@@ -20,11 +21,18 @@ public class JxlWWorkbookImpl implements WWorkbook {
 	}
 
 	public WSheet getSheet(int i) {
-		return new JxlWSheetImpl(workbook.getSheet(i));
+		Sheet sheet;
+		try {
+		    sheet = workbook.getSheet(i);
+		} catch (IndexOutOfBoundsException e) {
+		    sheet = null;
+		}
+		return (sheet != null) ? new JxlWSheetImpl(workbook.getSheet(i)) : NullWSheetImpl.INSTANCE;
 	}
 
 	public WSheet getSheet(String name) {
-		return new JxlWSheetImpl(workbook.getSheet(name));
+		Sheet sheet = workbook.getSheet(name);
+		return (sheet != null) ? new JxlWSheetImpl(workbook.getSheet(name)) : NullWSheetImpl.INSTANCE;
 	}
 
 	public WSheet[] getSheets() {
