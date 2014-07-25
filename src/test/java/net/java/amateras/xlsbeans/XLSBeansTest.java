@@ -12,6 +12,30 @@ import net.java.amateras.xlsbeans.xssfconverter.WorkbookFinder;
  */
 public class XLSBeansTest extends TestCase {
 
+	public void testSheetNotFound() throws Exception {
+		try {
+			UserListNoSheet userList = new XLSBeans().load(
+					XLSBeansTest.class.getResourceAsStream("example_1.xls"),
+					XLSBeansTest.class.getResourceAsStream("example_1.xml"),
+					UserListNoSheet.class);
+			fail();
+		} catch (SheetNotFoundException e) {
+			// OK 
+		}
+	}
+
+	public void testIgnoreSheetNotFound() throws Exception {
+		XLSBeansConfig config = new XLSBeansConfig();
+		config.setIgnoreSheetNotFound(true);
+			
+		XLSBeans xlsBeans = new XLSBeans();
+		xlsBeans.setConfig(config);
+		UserListNoSheet userList = xlsBeans.load(
+				XLSBeansTest.class.getResourceAsStream("example_1.xls"),
+				XLSBeansTest.class.getResourceAsStream("example_1.xml"),
+				UserListNoSheet.class);
+	}
+	
 	public void test1() throws Exception {
 
 		// System.out.println("*************************************");
