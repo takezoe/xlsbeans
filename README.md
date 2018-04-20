@@ -1,4 +1,4 @@
-XLSBeans
+XLSBeans [![Build Status](https://travis-ci.org/takezoe/xlsbeans.svg?branch=master)](https://travis-ci.org/takezoe/xlsbeans)
 ========
 
 XLSBeans is a Java library for mapping Excel sheets to POJO.
