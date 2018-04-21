@@ -1,10 +1,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>jp.sf.amateras.xlsbeans</groupId>
+  <groupId>com.github.takezoe</groupId>
   <artifactId>xlsbeans</artifactId>
   <packaging>jar</packaging>
-  <version>1.2.5</version>
+  <version>1.2.6</version>
   <name>XLSBeans</name>
   <url>http://maven.apache.org</url>
   <description>
@@ -17,10 +17,6 @@
       <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
     </license>
   </licenses>
-  <organization>
-    <name>Project Amateras</name>
-    <url>http://amateras.sourceforge.jp/</url>
-  </organization>
   <developers>
     <developer>
       <id>takezoe</id>
@@ -36,25 +32,10 @@
     <url>https://github.com/takezoe/xlsbeans</url>
   </scm>
 
-  <mailingLists>
-    <mailingList>
-      <name>amateras-mirage</name>
-      <archive>http://lists.sourceforge.jp/mailman/listinfo/amateras-dev</archive>
-    </mailingList>
-  </mailingLists>
-
   <issueManagement>
     <system>GitHub Issues</system>
     <url>https://github.com/takezoe/xlsbeans/issues</url>
   </issueManagement>
-
-  <repositories>
-    <repository>
-      <id>amateras</id>
-      <name>Project Amateras Maven2 Repository</name>
-      <url>http://amateras.sourceforge.jp/mvn/</url>
-    </repository>
-  </repositories>
 
   <dependencies>
     <dependency>
@@ -84,6 +65,35 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+
+  <profiles>
+    <profile>
+      <id>release-sign-artifacts</id>
+      <activation>
+        <property>
+          <name>performRelease</name>
+          <value>true</value>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 
   <build>
     <extensions>
@@ -167,13 +177,13 @@
 
   <distributionManagement>
     <repository>
-      <id>sourceforge.jp</id>
-      <url>scp://shell.sourceforge.jp/home/groups/a/am/amateras/htdocs/mvn/</url>
+      <id>sonatype-nexus-staging</id>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
     </repository>
-    <site>
-      <id>sourceforge.jp</id>
-      <url>scp://shell.sourceforge.jp/home/groups/a/am/amateras/htdocs/site/xlsbeans/</url>
-    </site>
+    <snapshotRepository>
+      <id>sonatype-nexus-snapshot</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
   </distributionManagement>
 
 </project>
