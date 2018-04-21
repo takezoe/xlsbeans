@@ -7,7 +7,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- *
  * @author Mitsuyoshi Hasegawa
  */
 @Retention(RetentionPolicy.RUNTIME)
@@ -15,8 +14,11 @@ import java.lang.annotation.Target;
 @Documented
 public @interface IterateTables {
 
-    String tableLabel();
-    Class<?> tableClass();
-    int bottom() default -1;
-    boolean optional() default false;
+  String tableLabel();
+
+  Class<?> tableClass();
+
+  int bottom() default -1;
+
+  boolean optional() default false;
 }

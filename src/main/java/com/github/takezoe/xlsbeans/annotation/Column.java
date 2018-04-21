@@ -7,17 +7,19 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 
  * @author Naoki Takezoe
  */
 @Target({ElementType.METHOD, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface Column {
-	
-	String columnName();
-	boolean merged() default false;
-	int headerMerged() default 0;
-	boolean optional() default false;
-	
+
+  String columnName();
+
+  boolean merged() default false;
+
+  int headerMerged() default 0;
+
+  boolean optional() default false;
+
 }

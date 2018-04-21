@@ -9,33 +9,33 @@ import java.util.List;
 
 public class Unit {
 
-	private String unitName;
-	private Point unitNamePosition;
-	private List<UnitUser> unitUsers;
+  private String unitName;
+  private Point unitNamePosition;
+  private List<UnitUser> unitUsers;
 
-	public String getUnitName() {
-		return unitName;
-	}
+  public String getUnitName() {
+    return unitName;
+  }
 
-	@LabelledCell(label="部門名", type= LabelledCellType.Right)
-	public void setUnitName(String unitName) {
-		this.unitName = unitName;
-	}
+  @LabelledCell(label = "部門名", type = LabelledCellType.Right)
+  public void setUnitName(String unitName) {
+    this.unitName = unitName;
+  }
 
-	public Point getUnitNamePosition() {
-		return unitNamePosition;
-	}
+  public Point getUnitNamePosition() {
+    return unitNamePosition;
+  }
 
-	public void setUnitNamePosition(Point unitNamePosition) {
-		this.unitNamePosition = unitNamePosition;
-	}
+  public void setUnitNamePosition(Point unitNamePosition) {
+    this.unitNamePosition = unitNamePosition;
+  }
 
-	public List<UnitUser> getUnitUsers() {
-		return unitUsers;
-	}
+  public List<UnitUser> getUnitUsers() {
+    return unitUsers;
+  }
 
-	@HorizontalRecords(tableLabel="部門情報")
-	public void setUnitUsers(List<UnitUser> unitUsers) {
-		this.unitUsers = unitUsers;
-	}
+  @HorizontalRecords(tableLabel = "部門情報")
+  public void setUnitUsers(List<UnitUser> unitUsers) {
+    this.unitUsers = unitUsers;
+  }
 }

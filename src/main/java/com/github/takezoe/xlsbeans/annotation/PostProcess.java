@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 /**
  * The method which are added this annotation are invoked
  * after sheet loading.
- * 
+ *
  * @author Naoki Takezoe
  */
 @Target({ElementType.METHOD})

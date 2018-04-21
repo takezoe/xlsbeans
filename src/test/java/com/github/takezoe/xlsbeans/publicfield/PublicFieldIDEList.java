@@ -5,10 +5,10 @@ import com.github.takezoe.xlsbeans.annotation.Sheet;
 
 import java.util.List;
 
-@Sheet(name="IDE")
+@Sheet(name = "IDE")
 public class PublicFieldIDEList {
-	
-	@HorizontalRecords(tableLabel="Java IDEs", recordClass=PublicFieldIDE.class)
-	public List<PublicFieldIDE> ides;
-	
+
+  @HorizontalRecords(tableLabel = "Java IDEs", recordClass = PublicFieldIDE.class)
+  public List<PublicFieldIDE> ides;
+
 }

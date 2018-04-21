@@ -15,27 +15,27 @@ import junit.framework.TestCase;
 
 public class FieldProcessorFactoryTest extends TestCase {
 
-	public void testRegisterProcessor() throws Exception {
-		SampleFieldProcessor processor = new SampleFieldProcessor();
-		DynamicAnnotationBuilder.setClassLoader(getClass().getClassLoader());
-		FieldProcessorFactory.registerProcessor(SampleAnnotation.class, processor);
+  public void testRegisterProcessor() throws Exception {
+    SampleFieldProcessor processor = new SampleFieldProcessor();
+    DynamicAnnotationBuilder.setClassLoader(getClass().getClassLoader());
+    FieldProcessorFactory.registerProcessor(SampleAnnotation.class, processor);
 
-		Annotation annotation = DynamicAnnotationBuilder.buildAnnotation(
-				SampleAnnotation.class, new AnnotationInfo());
+    Annotation annotation = DynamicAnnotationBuilder.buildAnnotation(
+        SampleAnnotation.class, new AnnotationInfo());
 
-		assertSame(processor, FieldProcessorFactory.getProcessor(annotation));
-	}
+    assertSame(processor, FieldProcessorFactory.getProcessor(annotation));
+  }
 
-	private @interface SampleAnnotation {
-	}
+  private @interface SampleAnnotation {
+  }
 
-	private class SampleFieldProcessor implements FieldProcessor {
-		public void doProcess(WSheet wSheet, Object obj, Method setter, Annotation ann, AnnotationReader reader,
-													XLSBeansConfig config, List<NeedPostProcess> needPostProcess) throws Exception {
-		}
+  private class SampleFieldProcessor implements FieldProcessor {
+    public void doProcess(WSheet wSheet, Object obj, Method setter, Annotation ann, AnnotationReader reader,
+                          XLSBeansConfig config, List<NeedPostProcess> needPostProcess) throws Exception {
+    }
 
-		public void doProcess(WSheet wSheet, Object obj, Field field, Annotation ann, AnnotationReader reader,
-				XLSBeansConfig config, List<NeedPostProcess> needPostProcess) throws Exception {
-		}
-	}
+    public void doProcess(WSheet wSheet, Object obj, Field field, Annotation ann, AnnotationReader reader,
+                          XLSBeansConfig config, List<NeedPostProcess> needPostProcess) throws Exception {
+    }
+  }
 }

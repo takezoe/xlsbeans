@@ -7,7 +7,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 
  * @author Naoki Takezoe
  */
 @Target({ElementType.METHOD, ElementType.FIELD})
@@ -15,6 +14,6 @@ import java.lang.annotation.Target;
 @Documented
 public @interface MapColumns {
 
-	String previousColumnName();
-	
+  String previousColumnName();
+
 }

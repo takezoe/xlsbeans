@@ -8,35 +8,34 @@ import org.apache.poi.ss.usermodel.Workbook;
 
 /**
  * Workbook wrapper for HSSF/XSSF.
- * 
- * @author Mitsuyoshi Hasegawa
  *
+ * @author Mitsuyoshi Hasegawa
  */
 public class XssfWWorkbookImpl implements WWorkbook {
 
-	private Workbook workbook = null;
+  private Workbook workbook = null;
 
-	public XssfWWorkbookImpl(Workbook workbook) {
-		this.workbook = workbook;
-	}
+  public XssfWWorkbookImpl(Workbook workbook) {
+    this.workbook = workbook;
+  }
 
-	public WSheet getSheet(int i) {
-		Sheet sheet = workbook.getSheetAt(i);
-		return (sheet != null) ? new XssfWSheetImpl(sheet) : NullWSheetImpl.INSTANCE;
-	}
+  public WSheet getSheet(int i) {
+    Sheet sheet = workbook.getSheetAt(i);
+    return (sheet != null) ? new XssfWSheetImpl(sheet) : NullWSheetImpl.INSTANCE;
+  }
 
-	public WSheet getSheet(String name) {
-		Sheet sheet = workbook.getSheet(name);
-		return (sheet != null) ? new XssfWSheetImpl(sheet) : NullWSheetImpl.INSTANCE;
-	}
+  public WSheet getSheet(String name) {
+    Sheet sheet = workbook.getSheet(name);
+    return (sheet != null) ? new XssfWSheetImpl(sheet) : NullWSheetImpl.INSTANCE;
+  }
 
-	public WSheet[] getSheets() {
-		int sheetNum = workbook.getNumberOfSheets();
-		WSheet[] retSheets = new WSheet[sheetNum];
-		for (int i = 0; i < sheetNum; i++) {
-			retSheets[i] = new XssfWSheetImpl(workbook.getSheetAt(i));
-		}
-		return retSheets;
-	}
+  public WSheet[] getSheets() {
+    int sheetNum = workbook.getNumberOfSheets();
+    WSheet[] retSheets = new WSheet[sheetNum];
+    for (int i = 0; i < sheetNum; i++) {
+      retSheets[i] = new XssfWSheetImpl(workbook.getSheetAt(i));
+    }
+    return retSheets;
+  }
 
 }

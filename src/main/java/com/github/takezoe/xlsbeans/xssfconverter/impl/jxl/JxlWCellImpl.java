@@ -7,31 +7,31 @@ import jxl.format.CellFormat;
 
 /**
  * Cell wrapper for Java Excel API.
- * @author Mitsuyoshi Hasegawa
  *
+ * @author Mitsuyoshi Hasegawa
  */
 public class JxlWCellImpl implements WCell {
-	private Cell cell = null;
+  private Cell cell = null;
 
-	public JxlWCellImpl(Cell cell) {
-		this.cell = cell;
-	}
+  public JxlWCellImpl(Cell cell) {
+    this.cell = cell;
+  }
 
-	public WCellFormat getCellFormat() {
-		CellFormat org = cell.getCellFormat();
-		return new JxlWCellFormatImpl(org);
-	}
+  public WCellFormat getCellFormat() {
+    CellFormat org = cell.getCellFormat();
+    return new JxlWCellFormatImpl(org);
+  }
 
-	public int getColumn() {
-		return cell.getColumn();
-	}
+  public int getColumn() {
+    return cell.getColumn();
+  }
 
-	public String getContents() {
-		return cell.getContents();
-	}
+  public String getContents() {
+    return cell.getContents();
+  }
 
-	public int getRow() {
-		return cell.getRow();
-	}
+  public int getRow() {
+    return cell.getRow();
+  }
 
 }

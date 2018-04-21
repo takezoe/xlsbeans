@@ -6,11 +6,11 @@ import com.github.takezoe.xlsbeans.annotation.MapColumns;
 import java.util.Map;
 
 public class PublicFieldLanguageIDE {
-	
-	@Column(columnName="Name")
-	public String name;
-	
-	@MapColumns(previousColumnName="Name")
-	public Map<String, String> attributes;
-	
+
+  @Column(columnName = "Name")
+  public String name;
+
+  @MapColumns(previousColumnName = "Name")
+  public Map<String, String> attributes;
+
 }

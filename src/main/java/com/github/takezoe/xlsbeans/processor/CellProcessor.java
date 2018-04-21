@@ -22,22 +22,22 @@ import com.github.takezoe.xlsbeans.xssfconverter.WSheet;
  */
 public class CellProcessor implements FieldProcessor {
 
-	public void doProcess(WSheet wSheet, Object obj, Method setter, Annotation ann, AnnotationReader reader,
-												XLSBeansConfig config, List<NeedPostProcess> needPostProcess) throws Exception {
-		Cell cell = (Cell)ann;
-		Utils.setPosition(cell.column(), cell.row(), obj, Utils.toPropertyName(setter.getName()));
+  public void doProcess(WSheet wSheet, Object obj, Method setter, Annotation ann, AnnotationReader reader,
+                        XLSBeansConfig config, List<NeedPostProcess> needPostProcess) throws Exception {
+    Cell cell = (Cell) ann;
+    Utils.setPosition(cell.column(), cell.row(), obj, Utils.toPropertyName(setter.getName()));
 
-		WCell wCell = wSheet.getCell(cell.column(), cell.row());
-		Utils.invokeSetter(setter, obj, wCell.getContents(), config);
-	}
+    WCell wCell = wSheet.getCell(cell.column(), cell.row());
+    Utils.invokeSetter(setter, obj, wCell.getContents(), config);
+  }
 
-	public void doProcess(WSheet wSheet, Object obj, Field field, Annotation ann, AnnotationReader reader,
-			XLSBeansConfig config, List<NeedPostProcess> needPostProcess) throws Exception {
-		Cell cell = (Cell)ann;
-		Utils.setPosition(cell.column(), cell.row(), obj, field.getName());
+  public void doProcess(WSheet wSheet, Object obj, Field field, Annotation ann, AnnotationReader reader,
+                        XLSBeansConfig config, List<NeedPostProcess> needPostProcess) throws Exception {
+    Cell cell = (Cell) ann;
+    Utils.setPosition(cell.column(), cell.row(), obj, field.getName());
 
-		WCell wCell = wSheet.getCell(cell.column(), cell.row());
-		Utils.setField(field, obj, wCell.getContents(), config);
-	}
+    WCell wCell = wSheet.getCell(cell.column(), cell.row());
+    Utils.setField(field, obj, wCell.getContents(), config);
+  }
 
 }

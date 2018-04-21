@@ -7,7 +7,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 
  * @author Naoki Takezoe
  */
 @Target({ElementType.METHOD, ElementType.FIELD})

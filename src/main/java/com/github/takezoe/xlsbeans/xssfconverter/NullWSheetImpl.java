@@ -7,26 +7,26 @@ package com.github.takezoe.xlsbeans.xssfconverter;
  */
 public class NullWSheetImpl implements WSheet {
 
-    public static final NullWSheetImpl INSTANCE = new NullWSheetImpl();
-    
-    public String getName() {
-	return null;
-    }
+  public static final NullWSheetImpl INSTANCE = new NullWSheetImpl();
 
-    public WCell[] getColumn(int i) {
-	return null;
-    }
+  public String getName() {
+    return null;
+  }
 
-    public WCell getCell(int column, int row) {
-	return null;
-    }
+  public WCell[] getColumn(int i) {
+    return null;
+  }
 
-    public int getColumns() {
-	return 0;
-    }
+  public WCell getCell(int column, int row) {
+    return null;
+  }
 
-    public int getRows() {
-	return 0;
-    }
+  public int getColumns() {
+    return 0;
+  }
+
+  public int getRows() {
+    return 0;
+  }
 
 }

@@ -13,20 +13,19 @@ import com.github.takezoe.xlsbeans.xml.AnnotationReader;
 import com.github.takezoe.xlsbeans.xssfconverter.WSheet;
 
 /**
- *
  * @author Naoki Takezoe
  * @see SheetName
  */
 public class SheetNameProcessor implements FieldProcessor {
 
-	public void doProcess(WSheet wSheet, Object obj, Method setter, Annotation cell, AnnotationReader reader,
-												XLSBeansConfig config, List<NeedPostProcess> needPostProcess) throws Exception {
-		Utils.invokeSetter(setter, obj, wSheet.getName(), config);
-	}
+  public void doProcess(WSheet wSheet, Object obj, Method setter, Annotation cell, AnnotationReader reader,
+                        XLSBeansConfig config, List<NeedPostProcess> needPostProcess) throws Exception {
+    Utils.invokeSetter(setter, obj, wSheet.getName(), config);
+  }
 
-	public void doProcess(WSheet wSheet, Object obj, Field field, Annotation ann, AnnotationReader reader,
-                          XLSBeansConfig config, List<NeedPostProcess> needPostProcess) throws Exception {
-		Utils.setField(field, obj, wSheet.getName(), config);
-	}
+  public void doProcess(WSheet wSheet, Object obj, Field field, Annotation ann, AnnotationReader reader,
+                        XLSBeansConfig config, List<NeedPostProcess> needPostProcess) throws Exception {
+    Utils.setField(field, obj, wSheet.getName(), config);
+  }
 
 }
