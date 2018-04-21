@@ -9,19 +9,11 @@ XLSBeans is a Java library for mapping Excel sheets to POJO.
 To use XLSBeans, add the following dependency to your pom.xml:
 
 ```xml
-<repositories>
-  <repository>
-    <id>amateras</id>
-    <name>Project Amateras Maven2 Repository</name>
-    <url>http://amateras.sourceforge.jp/mvn/</url>
-  </repository>
-</repositories>
-
 <dependencies>
   <dependency>
-    <groupId>jp.sf.amateras.xlsbeans</groupId>
+    <groupId>com.github.takezoe</groupId>
     <artifactId>xlsbeans</artifactId>
-    <version>1.2.5</version>
+    <version>1.2.6</version>
   </dependency>
 </dependencies>
 ```
@@ -73,4 +65,4 @@ UserList userList = (UserList)new XLSBeans().load(
 
 ## Documentation
 
-See more details in http://amateras.sourceforge.jp/site/xlsbeans/howtouse.html
+See more details in http://amateras.sourceforge.jp/site/xlsbeans/howtouse.html (in Japanese)
