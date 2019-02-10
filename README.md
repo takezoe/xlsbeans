@@ -13,7 +13,7 @@ To use XLSBeans, add the following dependency to your pom.xml:
   <dependency>
     <groupId>com.github.takezoe</groupId>
     <artifactId>xlsbeans</artifactId>
-    <version>1.2.6</version>
+    <version>1.2.7</version>
   </dependency>
 </dependencies>
 ```

@@ -4,7 +4,7 @@
   <groupId>com.github.takezoe</groupId>
   <artifactId>xlsbeans</artifactId>
   <packaging>jar</packaging>
-  <version>1.2.6</version>
+  <version>1.2.7</version>
   <name>XLSBeans</name>
   <url>http://maven.apache.org</url>
   <description>
